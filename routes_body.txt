@@ -1,0 +1,65 @@
+1. Insert Season
+    note :
+        a. NumOpts should be automatic
+        b. minToComp always less than NumOpts
+        c. endDate > startDate
+    
+
+    {
+    step:1,
+    season :{
+        sName: '', sStart: '', sEnd: '', challengeNo:1
+    },
+    challenge: [
+        {cId:"c1687186312937", 
+        cName:'', 
+        cDesc:'', 
+        cStart:"2023-06-19T20:24", 
+        cEnd:"2023-06-20T20:24", 
+        group : [
+        {
+            gId : "g1687186319821",
+            NumOpts : 1,
+            minToComp : 1,
+            taskIds:[t1687186312943],
+            eventIds:[]
+        }
+
+        ],
+        task :[
+            {
+                tId : "t1687186312943",
+                tName : 'walking',
+                tDesc : 'walk 3000 unit steps daily for 21 days',
+                tQuant : 3000,
+                tUnit : "units",
+                tPeriod : 1
+                tPeriodUnit : "day" 
+                tNumber : 1,
+                tTC : 21 ,
+                tStart:"2023-06-19T20:24", 
+                tEnd:"2023-06-20T20:24",
+                gId: 'g1687186319821'
+            }
+         ],
+
+        event : [
+            {
+                eId : "e1687186312078",
+                eName : 'Zumba',
+                eDescription : 'Zumba',
+                eStart: "2023-06-19T20:24", 
+                eEnd: "2023-06-20T20:24",
+                eFreq : 1,
+                gId: ''
+        }
+        ],
+
+        optAct : [
+            {
+
+
+            }
+        ]}
+        ]
+   }
