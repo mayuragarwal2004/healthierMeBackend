@@ -1,6 +1,7 @@
 const express = require('express')
+const {createChallengeController} = require('./../controllers/challenge.controller')
 const challengeRouter = express.Router();
 
-challengeRouter.get('./create', challenge.controller)
+challengeRouter.post('/create', createChallengeController)
 
 module.exports = challengeRouter
