@@ -1,5 +1,14 @@
 const Event = require("./event.model")
 
+const readEvent = async(cId) =>{
+    let eventCObj = await Event.findOne({ "cId": cId }).catch((err) => {
+      console.log(err);
+      return -1;
+    })
+  
+    return eventCObj.event
+  }
+
 const validateEvent = async(eItem) =>{
     if(!eItem.eId || !eItem.eName || !eItem.eDesc || !eItem.eFreq || !eItem.eStart || !eItem.eEnd){
         return false
@@ -29,4 +38,4 @@ const createCEvent = async(cId, eventArr)=>{
 
 }
 
-module.exports = {createCEvent, validateEvent}
+module.exports = {createCEvent, validateEvent, readEvent}

@@ -3,6 +3,20 @@ const Event = require("../events/event.model")
 const Task = require("../tasks/task.model")
 const Group = require("../groups/group.model")
 
+const readChallenge = async(cId) =>{
+    const challengeObj  = await Challenge.findOne({"cId" : cId}).catch((err) => {
+        console.log(err);
+        return -1;
+      });
+
+      if(challengeObj != null){
+        return challengeObj.toObject()
+      }
+      
+      return challengeObj
+
+}
+
 
 const validateChallenge = async(cObj) =>{
     if(!cObj.cId || !cObj.cName || !cObj.cDesc || !cObj.cStart || !cObj.cEnd){
@@ -32,4 +46,4 @@ const createChallenge = async(cObj)=>{
 
 }
 
-module.exports = {validateChallenge, createChallenge }
+module.exports = {validateChallenge, createChallenge, readChallenge }

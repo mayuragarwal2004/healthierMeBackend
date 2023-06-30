@@ -1,5 +1,14 @@
 const Task = require("./task.model");
 
+const readTask = async(cId) =>{
+  let taskCObj = await Task.findOne({ "cId": cId }).catch((err) => {
+    console.log(err);
+    return -1;
+  })
+
+  return taskCObj.task
+}
+
 const validateTask = async(tItem) =>{
     if(!tItem.tId || !tItem.tName || !tItem.tDesc || !tItem.tQuant || !tItem.tUnit || !tItem.tPeriodUnit || !tItem.tTC || !tItem.tStart || !tItem.tEnd){
         return false
@@ -30,4 +39,4 @@ const createCTask = async (cId, taskArr) => {
 
 };
 
-module.exports = { createCTask, validateTask };
+module.exports = { createCTask, validateTask, readTask };

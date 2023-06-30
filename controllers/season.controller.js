@@ -1,8 +1,64 @@
-const {createCTask, validateTask} = require('../models/tasks/task.queries')
-const {createCEvent, validateEvent} = require('../models/events/event.queries')
-const {createCGroup, validateGroup} = require('../models/groups/group.queries')
-const { validateChallenge, createChallenge } = require('../models/challenges/challenge.queries')
-const { validateSeason, createSeason } = require('../models/seasons/season.queries')
+const {createCTask, validateTask, readTask} = require('../models/tasks/task.queries')
+const {createCEvent, validateEvent, readEvent} = require('../models/events/event.queries')
+const {createCGroup, validateGroup, readGroup} = require('../models/groups/group.queries')
+const { validateChallenge, createChallenge, readChallenge } = require('../models/challenges/challenge.queries')
+const { validateSeason, createSeason, readSeason } = require('../models/seasons/season.queries')
+
+
+const readSeasonController = async(req, res)=>{
+    //get season object
+    let seasonObj = await readSeason(req.body.sId)
+    
+    if(seasonObj == -1){
+        return res.status(400).send("Error getting season data")
+    }
+    if(!seasonObj){
+        return res.status(404).send("Season data not found")
+    }
+
+    seasonObj.challenge = []
+
+    //iterate over challenge ids  
+   let {challengeIds} = seasonObj
+    for(i in challengeIds){
+        let challengeObj = await readChallenge(challengeIds[i])
+        if(challengeObj == -1){
+            return res.status(400).send("Error getting challenges")
+        }
+        if(!challengeObj){
+            return res.status(404).send("Challenge data not found")
+        }
+        // challengeObj = challengeObj.toObject()
+        
+
+        let {cId} = challengeObj
+
+        //for every challenge id, get tasks, events, groups
+        let groupArr = await readGroup(cId)
+        if(groupArr == -1){
+            return res.status(400).send("Error getting Groups")
+        }
+        let eventArr = await readEvent(cId)
+        if(eventArr == -1){
+            return res.status(400).send("Error getting Events")
+        }
+        let taskArr = await readTask(cId)
+        if(taskArr == -1){
+            return res.status(400).send("Error getting Tasks")
+        }
+
+       challengeObj.group = [...groupArr]
+       challengeObj.event = [...eventArr]
+       challengeObj.task = [...taskArr]
+
+        // append challenge object in season object
+        seasonObj.challenge.push(challengeObj)
+
+    }
+
+    return res.status(200).send(seasonObj)
+
+}
 
 const createSeasonController = async (req,res)=>{
     let challengeIds = [] //for adding into seasons object
@@ -11,7 +67,7 @@ const createSeasonController = async (req,res)=>{
     // console.log(challengeArr)
 
     if(!seasonObj || !await validateSeason(seasonObj)){
-        return res.status(400).send("Insufficient inputs")
+        return res.status(400).send("Insufficient/ Wrong inputs")
     }
 
     if(!challengeArr){
@@ -98,4 +154,4 @@ const createSeasonController = async (req,res)=>{
     return res.status(200).send("Form submitted successfully")
 }
 
-module.exports = {createSeasonController}
+module.exports = {createSeasonController, readSeasonController}

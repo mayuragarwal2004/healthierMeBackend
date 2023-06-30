@@ -1,5 +1,15 @@
 const Group = require("./group.model");
 
+const readGroup = async(cId) =>{
+  let groupCObj = await Group.findOne({ "cId": cId }).catch((err) => {
+    console.log(err);
+    return -1;
+  })
+
+  return groupCObj.group
+}
+
+
 const validateGroup = async (gItem) => {
   if (
     !gItem.gId ||
@@ -33,4 +43,4 @@ const createCGroup = async (cId, groupArr) => {
   return createCGroupMain;
 };
 
-module.exports = { createCGroup, validateGroup };
+module.exports = { createCGroup, validateGroup, readGroup };
