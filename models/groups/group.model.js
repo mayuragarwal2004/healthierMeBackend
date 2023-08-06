@@ -8,7 +8,10 @@ const groupSchema = new Schema(
         required: true,
         unique: true,
       },
-
+      gName: {
+        type: String, 
+        required: true,
+      },
       numOpts: {
         type: Number, 
         required: true,

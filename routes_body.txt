@@ -23,6 +23,7 @@
             "group": [
                 {
                     "gId": "g1687186319821",
+                    "gName": "",
                     "numOpts": 1,
                     "minToComp": 1,
                     "taskIds": [
@@ -60,3 +61,38 @@
         }
     ]
 }
+
+
+Activity Status
+
+route body :
+userId : ""
+commId : ''
+seasonId: ''
+cId :''
+actId : ''
+date : ''
+ts : ''
+quant : '' 
+
+
+mongo model:
+userId : "6Z9Jp5dgq9YkzhkPOhGCf63yjQx2"
+user : [
+        {
+            cId: "c1687186312939"
+            chlg : [
+                {
+                    actId : "t1687186312939"
+                    act : [
+                        {
+                            date : 
+                            ts :
+                            quant : 
+                        }
+                    ]
+                }
+            ]
+        }
+
+    ]
