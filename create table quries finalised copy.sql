@@ -12,7 +12,7 @@ activity table : challenge ids
 
 
 
-CREATE TABLE User (
+CREATE TABLE healthierme.User (
     user_id VARCHAR(255) PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
@@ -26,23 +26,16 @@ CREATE TABLE User (
     pincode VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
-    community_ids JSON, --denormalised
-    community_heads_ids JSON, --denormalised
-    community_creator_ids JSON, --denormalised
-    active_season_ids JSON,  --denormalised
+    community_ids JSON,
+    community_heads_ids JSON,
+    community_creator_ids JSON,
+    active_season_ids JSON,
     join_date DATETIME NOT NULL,
     last_active_datetime DATETIME,
-    height FLOAT, -- Store height in cm or inches as a decimal value
-    weight FLOAT, -- Store weight in kg or lbs as a decimal value
-    profile_picture VARCHAR(255), -- Assuming the image URL will be stored
-    notification_settings TEXT, -- Store as JSON or serialized data, depending on the database capabilities
-   
-    
-    challenge_code VARCHAR(50),
-    active_challenge_groups VARCHAR(255), -- Store as comma-separated values or JSON array, depending on the database capabilities
-    timezone VARCHAR(100),
-    preferred_communication ENUM('Email', 'Phone', 'Both'),
-    activity_points INT DEFAULT 0 -- Assuming activity points are integers and start at 0
+    height FLOAT,
+    weight FLOAT,
+    profile_picture VARCHAR(255),
+    notification_settings TEXT
 );
 
 CREATE INDEX idx_phone ON User (phone);
@@ -66,10 +59,7 @@ CREATE TABLE Community (
     parent JSON,
     children JSON,
     access ENUM('Open', 'Admin_control', 'Predefined'),
-    last_updated_datetime DATETIME, 
-    
-    season_array JSON, -- Store as JSON or serialized data, depending on the database capabilities
-    active_season_id VARCHAR(255) -- Optional, if applicable
+    last_updated_datetime DATETIME 
 );
 
 CREATE UNIQUE INDEX idx_community_id ON Community (community_id);
@@ -78,12 +68,17 @@ CREATE INDEX idx_created_by_user_id ON Community (created_by_user_id);
 CREATE INDEX idx_community_name ON Community (community_name);
 
 
-CREATE TABLE UserCommunity (
-    user_id VARCHAR(255),
-    community_id VARCHAR(255),
-    role VARCHAR(15),
-    last_updated_datetime DATETIME,
-)
+CREATE TABLE CommunityUserMapping (
+    community_user_mapping_id INT PRIMARY KEY AUTO_INCREMENT,
+    community_id VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
+    role ENUM('Member', 'Admin', 'Head') NOT NULL,
+    join_date DATETIME NOT NULL,
+    last_active_datetime DATETIME,
+    UNIQUE KEY unique_community_user (community_id, user_id), -- Ensures each user can have only one role per community
+    FOREIGN KEY (community_id) REFERENCES Community(community_id),
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
 
 
 -- many to many change respectively
@@ -99,12 +94,7 @@ CREATE TABLE Seasons (
     created_datetime DATETIME NOT NULL,
     last_updated_datetime DATETIME,
     description TEXT,
-    min_to_comply INT, --less than num_challenges
-
-
-    FOREIGN KEY(community_id VARCHAR(255)),
-    assigned_challenges_id_array JSON, -- Store as JSON or serialized data, depending on the database capabilities
-    
+    min_to_comply INT, --less than num_challenges    
 );
 
 CREATE UNIQUE INDEX idx_season_id ON Seasons (season_id);
@@ -112,15 +102,18 @@ CREATE INDEX idx_start_date ON Seasons (start_date);
 CREATE INDEX idx_end_date ON Seasons (end_date);
 
 
-CREATE TABLE CommunitySeason (
-    community_id VARCHAR(255),
-    season_id VARCHAR(255),
-    user_id VARCHAR(255),
-    last_updated_datetime DATETIME,
-)
+CREATE TABLE CommunitySeasonMapping (
+    community_season_mapping_id INT PRIMARY KEY AUTO_INCREMENT,
+    community_id VARCHAR(255) NOT NULL,
+    season_id VARCHAR(255) NOT NULL,
+    join_date DATETIME NOT NULL,
+    UNIQUE KEY unique_community_season (community_id, season_id), -- Ensures each community can have only one entry per season
+    FOREIGN KEY (community_id) REFERENCES Community(community_id), -- Assuming you have a "Community" table
+    FOREIGN KEY (season_id) REFERENCES Seasons(season_id) -- Assuming you have a "Seasons" table
+);
 
 
-CREATE TABLE Challenge (
+CREATE TABLE Challenges (
     challenge_id VARCHAR(255) PRIMARY KEY,
     community_head_user_id VARCHAR(255) NOT NULL,
     challenge_name VARCHAR(255) NOT NULL,
@@ -128,12 +121,10 @@ CREATE TABLE Challenge (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     created_datetime DATETIME NOT NULL,
-    image BLOB, --check
-    FOREIGN KEY(season_id VARCHAR(255)),
+    season_id VARCHAR(255),
     active BOOLEAN DEFAULT false,
-    
     last_updated_datetime DATETIME,
-    completed BOOLEAN DEFAULT false
+    FOREIGN KEY (season_id) REFERENCES Seasons(season_id),
 );
 
 CREATE UNIQUE INDEX idx_challenge_id ON Challenge (challenge_id);
@@ -158,8 +149,8 @@ CREATE UNIQUE INDEX idx_activity_id ON Activities (activity_id);
 
 
 
-CREATE TABLE Task (VARCHAR(255)INT AUTO_INCREMENT PRIMARY KEY,
-    activity_id INT NOT NULL,
+CREATE TABLE Tasks (
+    activity_id VARCHAR(255) PRIMARY KEY,
     task_name VARCHAR(255) NOT NULL,
     task_description TEXT,
     task_quantity INT,
@@ -170,20 +161,23 @@ CREATE TABLE Task (VARCHAR(255)INT AUTO_INCREMENT PRIMARY KEY,
     times_to_complete INT,
     start_date DATE,
     end_date DATE
+    challenge_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
 );
 CREATE INDEX idx_task_activity_id ON Task (activity_id);
 CREATE INDEX idx_task_start_date ON Task (start_date);
 CREATE INDEX idx_task_end_date ON Task (end_date);
 
 
-CREATE TABLE Event (
-    cid INT AUTO_INCREMENT PRIMARY KEY,
-    activity_id INT NOT NULL,
+CREATE TABLE Events (
+    activity_id VARCHAR(255) PRIMARY KEY,
     event_name VARCHAR(255) NOT NULL,
     event_description TEXT,
     start_date DATE,
     end_date DATE,
     event_frequency INT
+    challenge_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
 );
 CREATE INDEX idx_event_activity_id ON Event (activity_id);
 CREATE INDEX idx_event_start_date ON Event (start_date);
