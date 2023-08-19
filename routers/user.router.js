@@ -1,5 +1,5 @@
 const express = require('express')
-const {userCreateController, userReadController} = require('./../controllers/user.controller')
+const {userCreateController, userReadController, userExistController} = require('./../controllers/user.controller')
 const userRouter = express.Router();
 
 // @route Post /api/user/create
@@ -11,5 +11,10 @@ userRouter.post('/create', userCreateController)
 // @desc Read user
 // @access 
 userRouter.post('/read', userReadController)
+
+// @route Post /api/user/userexist
+// @desc Read user
+// @access 
+userRouter.post('/userexist', userExistController)
 
 module.exports = userRouter

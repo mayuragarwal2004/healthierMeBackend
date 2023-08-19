@@ -58,4 +58,5 @@ const createUser = async (uItem) => {
   return createUser;
 };
 
-module.exports = { createUser, getMId, validateUser, readUser };
+// module.exports = { createUser, getMId, validateUser, readUser };
+module.exports = { createUser, validateUser, readUser };

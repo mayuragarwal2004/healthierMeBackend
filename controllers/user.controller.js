@@ -34,4 +34,12 @@ const userCreateController = async(req, res) =>{
     return res.status(200).send("User created successfully");
     
 }
-module.exports = {userCreateController, userReadController}
+
+const userExistController = async(req, res) =>{
+    let uItem = req.body
+    console.log(req.body)
+    return res.status(200).send(true);
+    
+}
+
+module.exports = {userCreateController, userReadController, userExistController}
