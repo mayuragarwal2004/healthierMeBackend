@@ -52,7 +52,7 @@ CREATE INDEX idx_phone ON User (phone);
 
 CREATE TABLE Community (
     community_id VARCHAR(255) PRIMARY KEY,
-    community_join_code INT NOT NULL,
+    community_join_code VARCHAR(255) NOT NULL,
     community_name VARCHAR(255) NOT NULL,
     locality VARCHAR(255),
     pincode VARCHAR(255) NOT NULL,

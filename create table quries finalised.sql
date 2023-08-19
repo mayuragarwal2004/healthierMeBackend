@@ -28,7 +28,7 @@ CREATE TABLE HealthierMe.User (
 
 CREATE TABLE HealthierMe.Community (
     community_id VARCHAR(255) PRIMARY KEY,
-    community_join_code INT NOT NULL,
+    community_join_code VARCHAR(6) NOT NULL,
     community_name VARCHAR(255) NOT NULL,
     locality VARCHAR(255),
     pincode VARCHAR(255) NOT NULL,
@@ -64,7 +64,6 @@ CREATE TABLE HealthierMe.Seasons (
     end_date DATE NOT NULL,
     num_challenges INT,
     active BOOLEAN DEFAULT false,
-    community_id JSON, -- check for tables
     created_by_user_id VARCHAR(255), -- Optional, if applicable
     created_datetime DATETIME NOT NULL,
     last_updated_datetime DATETIME,
@@ -97,16 +96,20 @@ CREATE TABLE HealthierMe.Challenges (
 );
 
 CREATE TABLE HealthierMe.Activities (
-    activity_id INT PRIMARY KEY,
+    activity_id VARCHAR(255) PRIMARY KEY,
     activity_name VARCHAR(255) NOT NULL,
+    challenge_id VARCHAR(255) NOT NULL,
     activity_type ENUM('Task', 'Event', 'Group') NOT NULL,
     num_options INT, -- Only when activity_type = 'Options'
     min_to_complete INT, -- Only when activity_type = 'Options'
-    sub_activities JSON -- Store as JSON or serialized data, depending on the database capabilities
+    sub_activities JSON, -- Store as JSON or serialized data, depending on the database capabilities
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
 );
 
 CREATE TABLE HealthierMe.Tasks (
-    activity_id VARCHAR(255) PRIMARY KEY,
+    task_id VARCHAR(255) PRIMARY KEY,
+    activity_id VARCHAR(255) NOT NULL,
+    challenge_id VARCHAR(255) NOT NULL,
     task_name VARCHAR(255) NOT NULL,
     task_description TEXT,
     task_quantity INT,
@@ -117,19 +120,21 @@ CREATE TABLE HealthierMe.Tasks (
     times_to_complete INT,
     start_date DATE,
     end_date DATE,
-    challenge_id VARCHAR(255) NOT NULL,
-    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id)
 );
 
 CREATE TABLE HealthierMe.Events (
-    activity_id VARCHAR(255) PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
+    activity_id VARCHAR(255) NOT NULL,
+    challenge_id VARCHAR(255) NOT NULL,
     event_name VARCHAR(255) NOT NULL,
     event_description TEXT,
     start_date DATE,
     end_date DATE,
     event_frequency INT,
-    challenge_id VARCHAR(255) NOT NULL,
-    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id)
 );
 
 CREATE TABLE HealthierMe.Group (
@@ -140,11 +145,14 @@ CREATE TABLE HealthierMe.Group (
 );
 
 CREATE TABLE HealthierMe.ActivityStatus (
-    user_id INT NOT NULL,
-    challenge_id INT NOT NULL,
-    activity_id INT NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
+    challenge_id VARCHAR(255) NOT NULL,
+    activity_id VARCHAR(255) NOT NULL,
     date DATE NOT NULL,
     timestamp DATETIME NOT NULL,
     quantity INT,
-    PRIMARY KEY (user_id, challenge_id, activity_id, date)
+    PRIMARY KEY (user_id, challenge_id, activity_id, date),
+    FOREIGN KEY (user_id) REFERENCES User(user_id),
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
+    FOREIGN KEY (activity_id) REFERENCES Challenges(activity_id)
 );
