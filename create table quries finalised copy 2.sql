@@ -88,10 +88,21 @@ CREATE TABLE HealthierMe.Challenges (
     FOREIGN KEY (season_id) REFERENCES Seasons(season_id)
 );
 
+CREATE TABLE HealthierMe.Activities (
+    activity_id VARCHAR(255) PRIMARY KEY,
+    activity_name VARCHAR(255) NOT NULL,
+    challenge_id VARCHAR(255) NOT NULL,
+    activity_type ENUM('Task', 'Event', 'Group') NOT NULL,
+    num_options INT, -- Only when activity_type = 'Options'
+    min_to_complete INT, -- Only when activity_type = 'Options'
+    sub_activities JSON, -- Store as JSON or serialized data, depending on the database capabilities
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
+);
+
 CREATE TABLE HealthierMe.Tasks (
     task_id VARCHAR(255) PRIMARY KEY,
+    activity_id VARCHAR(255) NOT NULL,
     challenge_id VARCHAR(255) NOT NULL,
-    g_id VARCHAR(255),
     task_name VARCHAR(255) NOT NULL,
     task_description TEXT,
     task_quantity INT,
@@ -103,29 +114,27 @@ CREATE TABLE HealthierMe.Tasks (
     start_date DATE,
     end_date DATE,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
-    FOREIGN KEY (g_id) REFERENCES Group(g_id)
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id)
 );
 
 CREATE TABLE HealthierMe.Events (
     event_id VARCHAR(255) PRIMARY KEY,
+    activity_id VARCHAR(255) NOT NULL,
     challenge_id VARCHAR(255) NOT NULL,
-    g_id VARCHAR(255),
     event_name VARCHAR(255) NOT NULL,
     event_description TEXT,
     start_date DATE,
     end_date DATE,
     event_frequency INT,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
-    FOREIGN KEY (g_id) REFERENCES Group(g_id)
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id)
 );
 
 CREATE TABLE HealthierMe.Group (
-    g_id VARCHAR(255) PRIMARY KEY,
-    challenge_id VARCHAR(255) NOT NULL,
+    group_id VARCHAR(255) PRIMARY KEY,
     num_opts INT,
     min_to_comp INT,
-    activity JSON, -- Store as JSON or serialized data, depending on the database capabilities
-    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
+    activity JSON -- Store as JSON or serialized data, depending on the database capabilities
 );
 
 CREATE TABLE HealthierMe.ActivityStatus (
@@ -137,5 +146,6 @@ CREATE TABLE HealthierMe.ActivityStatus (
     quantity INT,
     PRIMARY KEY (user_id, challenge_id, activity_id, date),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id)
 );

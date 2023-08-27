@@ -22,7 +22,7 @@ VALUES
 ('o1234567890', 'abcdef', 'Rotary Club', 'Lokmanyanagar', '411045', 'Pune', 'Maharashtra', 'abcxyz', '["abcxyz"]', '2023-08-18 06:01:29.000000', '1', 'Community of Rotary Club Pune Lokmanyanagar', NULL, NULL, 'Open', NULL)
 
 
-INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'abcxyz', 'Admin', '2023-08-18 07:59:41.000000', NULL);
+INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'abcxyz', 'Creator', '2023-08-18 07:59:41.000000', NULL);
 INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'defxyz', 'Member', '2023-08-18 08:00:17.000000', NULL);
 INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'ghixyz', 'Member', '2023-08-18 08:00:47.000000', NULL);
 
