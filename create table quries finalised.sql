@@ -154,5 +154,5 @@ CREATE TABLE HealthierMe.ActivityStatus (
     PRIMARY KEY (user_id, challenge_id, activity_id, date),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
-    FOREIGN KEY (activity_id) REFERENCES Challenges(activity_id)
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id)
 );
