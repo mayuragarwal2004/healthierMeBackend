@@ -2,8 +2,10 @@ Access the Chat GPT conversation here:
 https://chat.openai.com/share/ff5c20f2-9b9d-412f-83d6-5228b7e7a156
 
 many to many tables
-community - users : clustered indexing
-active season - users : 
+users : communtiy : seasons : challenge : activity tpot
+
+community - users : clustered indexing --denormalised
+active season - users :   --denormalised
 
 index tables - clustered -- are column names redundant here?
 seasons table : community ids 
@@ -34,14 +36,14 @@ CREATE TABLE User (
     last_active_datetime DATETIME,
     height FLOAT, -- Store height in cm or inches as a decimal value
     weight FLOAT, -- Store weight in kg or lbs as a decimal value
-    profile_picture VARCHAR(255), -- Assuming the image URL will be stored
-    notification_settings TEXT, -- Store as JSON or serialized data, depending on the database capabilities
    
     
     challenge_code VARCHAR(50),
     active_challenge_groups VARCHAR(255), -- Store as comma-separated values or JSON array, depending on the database capabilities
+    profile_picture VARCHAR(255), -- Assuming the image URL will be stored
     timezone VARCHAR(100),
     preferred_communication ENUM('Email', 'Phone', 'Both'),
+    notification_settings TEXT, -- Store as JSON or serialized data, depending on the database capabilities
     activity_points INT DEFAULT 0 -- Assuming activity points are integers and start at 0
 );
 
@@ -52,23 +54,23 @@ CREATE INDEX idx_phone ON User (phone);
 
 CREATE TABLE Community (
     community_id VARCHAR(255) PRIMARY KEY,
-    community_join_code VARCHAR(255) NOT NULL,
+    community_join_code INT NOT NULL,
     community_name VARCHAR(255) NOT NULL,
     locality VARCHAR(255),
     pincode VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
-    created_by_user_id VARCHAR(255) NOT NULL,
-    community_heads_user_id JSON , -- table needed?
+    created_by_user_id VARCHAR(255) NOT NULL, --denormalised
+    community_heads_user_id JSON , --denormalised
     created_datetime DATETIME NOT NULL, 
-    members_count INT DEFAULT 1,
+    members_count INT DEFAULT 1, 
     description TEXT, 
     parent JSON,
     children JSON,
     access ENUM('Open', 'Admin_control', 'Predefined'),
-    last_updated_datetime DATETIME, 
     
     season_array JSON, -- Store as JSON or serialized data, depending on the database capabilities
+    last_updated_datetime DATETIME, 
     active_season_id VARCHAR(255) -- Optional, if applicable
 );
 

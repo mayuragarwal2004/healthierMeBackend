@@ -96,3 +96,17 @@ user : [
         }
 
     ]
+
+{
+userId : "6Z9Jp5dgq9YkzhkPOhGCf63yjQx2"
+cId: "c1687186312939"
+actId : "t1687186312939"
+act : [
+        {
+            date : 
+            ts :
+            quant : 
+        }
+    ]
+}
+          
