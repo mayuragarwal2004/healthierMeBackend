@@ -32,10 +32,10 @@ CREATE TABLE HealthierMe.Community (
     state VARCHAR(255) NOT NULL,
     created_by_user_id VARCHAR(255) NOT NULL,
     created_datetime DATETIME NOT NULL, 
-    members_count INT DEFAULT 1,
+    members_count INT DEFAULT 1,                    -- has to be updated
     description TEXT, 
     access ENUM('Open', 'Admin_control', 'Predefined'),
-    last_updated_datetime DATETIME
+    last_updated DATETIME                           --length shortend 
 );
 
 CREATE TABLE HealthierMe.CommunityUserMapping (
@@ -44,7 +44,7 @@ CREATE TABLE HealthierMe.CommunityUserMapping (
     user_id VARCHAR(255) NOT NULL,
     role ENUM('Member', 'Admin', 'Creator') NOT NULL,
     join_date DATETIME NOT NULL,
-    last_active_datetime DATETIME,
+    --last_active_datetime DATETIME,          not needed
     UNIQUE KEY unique_community_user (community_id, user_id), -- Ensures each user can have only one role per community
     FOREIGN KEY (community_id) REFERENCES Community(community_id),
     FOREIGN KEY (user_id) REFERENCES User(user_id)
@@ -55,13 +55,13 @@ CREATE TABLE HealthierMe.Seasons (
     name VARCHAR(255) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    num_challenges INT,
+    num_challenges INT,             -- has to be updated with every challenge
     active BOOLEAN DEFAULT false,
     created_by_user_id VARCHAR(255), -- Optional, if applicable
     created_datetime DATETIME NOT NULL,
     last_updated_datetime DATETIME,
     description TEXT,
-    min_to_comply INT /* less than num_challenges */
+    -- min_to_comply INT /* less than num_challenges */ not applicable
 );
 
 CREATE TABLE HealthierMe.CommunitySeasonMapping (
@@ -76,21 +76,22 @@ CREATE TABLE HealthierMe.CommunitySeasonMapping (
 
 CREATE TABLE HealthierMe.Challenges (
     challenge_id VARCHAR(255) PRIMARY KEY,
-    community_head_user_id VARCHAR(255) NOT NULL,
+    created_by VARCHAR(255) NOT NULL,   -- created by - check if he's admin/creator
     challenge_name VARCHAR(255) NOT NULL,
     description TEXT,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     created_datetime DATETIME NOT NULL,
-    season_id VARCHAR(255),
-    active BOOLEAN DEFAULT false,
+    season_id VARCHAR(255), 
+    active BOOLEAN DEFAULT false, 
     last_updated_datetime DATETIME,
-    FOREIGN KEY (community_head_user_id) REFERENCES User(user_id),
+    FOREIGN KEY (created_by) REFERENCES User(user_id),
     FOREIGN KEY (season_id) REFERENCES Seasons(season_id)
 );
 
 CREATE TABLE HealthierMe.Groups (
     g_id VARCHAR(255) PRIMARY KEY,
+    g_name VARCHAR(255),
     challenge_id VARCHAR(255) NOT NULL,
     num_opts INT,
     min_to_comp INT,
@@ -113,7 +114,7 @@ CREATE TABLE HealthierMe.Tasks (
     start_date DATE,
     end_date DATE,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
-    FOREIGN KEY (g_id) REFERENCES Groups(g_id)
+    FOREIGN KEY (g_id) REFERENCES Groups(g_id) -- check to not create problems in referencing blanks
 );
 
 CREATE TABLE HealthierMe.Events (
@@ -131,12 +132,12 @@ CREATE TABLE HealthierMe.Events (
 
 CREATE TABLE HealthierMe.ActivityStatus (
     user_id VARCHAR(255) NOT NULL,
-    challenge_id VARCHAR(255) NOT NULL,
+    --challenge_id VARCHAR(255) NOT NULL,
     activity_id VARCHAR(255) NOT NULL,
     date DATE NOT NULL,
     timestamp DATETIME NOT NULL,
     quantity INT,
-    PRIMARY KEY (user_id, challenge_id, activity_id, date),
+    PRIMARY KEY (user_id, activity_id, timestamp), -- challenge id not needed, date replaced by timestamp
     FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
+    --FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
 );
