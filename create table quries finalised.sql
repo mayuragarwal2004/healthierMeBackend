@@ -85,7 +85,17 @@ CREATE TABLE HealthierMe.Challenges (
     season_id VARCHAR(255),
     active BOOLEAN DEFAULT false,
     last_updated_datetime DATETIME,
+    FOREIGN KEY (community_head_user_id) REFERENCES User(user_id),
     FOREIGN KEY (season_id) REFERENCES Seasons(season_id)
+);
+
+CREATE TABLE HealthierMe.Groups (
+    g_id VARCHAR(255) PRIMARY KEY,
+    challenge_id VARCHAR(255) NOT NULL,
+    num_opts INT,
+    min_to_comp INT,
+    activity JSON, -- Store as JSON or serialized data, depending on the database capabilities
+    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
 );
 
 CREATE TABLE HealthierMe.Tasks (
@@ -103,7 +113,7 @@ CREATE TABLE HealthierMe.Tasks (
     start_date DATE,
     end_date DATE,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
-    FOREIGN KEY (g_id) REFERENCES Group(g_id)
+    FOREIGN KEY (g_id) REFERENCES Groups(g_id)
 );
 
 CREATE TABLE HealthierMe.Events (
@@ -116,16 +126,7 @@ CREATE TABLE HealthierMe.Events (
     end_date DATE,
     event_frequency INT,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
-    FOREIGN KEY (g_id) REFERENCES Group(g_id)
-);
-
-CREATE TABLE HealthierMe.Group (
-    g_id VARCHAR(255) PRIMARY KEY,
-    challenge_id VARCHAR(255) NOT NULL,
-    num_opts INT,
-    min_to_comp INT,
-    activity JSON, -- Store as JSON or serialized data, depending on the database capabilities
-    FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
+    FOREIGN KEY (g_id) REFERENCES Groups(g_id)
 );
 
 CREATE TABLE HealthierMe.ActivityStatus (

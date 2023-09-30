@@ -6,6 +6,7 @@ const userRouter = require("./routers/user.router");
 // const connectToMongoose = require('./connection')
 const con = require("./connection.sql");
 const cors = require("cors");
+const communityRouter = require("./routers/community.router");
 
 app.use(express.json());
 
@@ -21,6 +22,7 @@ app.use(cors());
 
 // app.use('/api/season', seasonRouter)
 // app.use('/api/challenge', challengeRouter)
+app.use('/api/community', communityRouter)
 app.use('/api/user', userRouter)
 
 app.listen(5001, () => console.log("listening"));

@@ -2,7 +2,7 @@ const {createCTask, validateTask, readTask} = require('../models/tasks/task.quer
 const {createCEvent, validateEvent, readEvent} = require('../models/events/event.queries')
 const {createCGroup, validateGroup, readGroup} = require('../models/groups/group.queries')
 const { validateChallenge, createChallenge, readChallenge } = require('../models/challenges/challenge.queries')
-const { validateSeason, createSeason, readSeason } = require('../models/seasons/season.queries')
+const { validateSeason, createSeason, readSeason, allSeasons } = require('../models/seasons/season.queries.sql')
 
 
 const readSeasonController = async(req, res)=>{
@@ -152,6 +152,14 @@ const createSeasonController = async (req,res)=>{
 
     }
     return res.status(200).send("Form submitted successfully")
+}
+
+const allSeasonController = async (req,res)=>{
+    let challengeIds = [] //for adding into seasons object
+    const useID = req.body.uID
+    const seasonID = req.body.sID
+
+    allSeasons(useID, seasonID)
 }
 
 module.exports = {createSeasonController, readSeasonController}
