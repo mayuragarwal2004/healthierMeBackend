@@ -51,35 +51,35 @@ VALUES
 
 -- Community 1
 INSERT INTO `Community` 
-(`community_id`, `community_join_code`, `community_name`, `locality`, `pincode`, `city`, `state`,`created_datetime`, `members_count`, `description`, `access`, `last_updated_datetime`) 
+(`community_id`, `community_join_code`, `community_name`, `locality`, `pincode`, `city`, `state`,`created_datetime`, `members_count`, `description`, `access`, `last_updated`) 
 VALUES 
 ('o1234567890', 'abcdef', 'Rotary Club', 'Lokmanyanagar', '411045', 'Pune', 'Maharashtra','2023-08-18 06:01:29.000000', '1', 'Community of Rotary Club Pune Lokmanyanagar', 'Open', NULL);
 
 -- Community 2
 INSERT INTO `Community` 
-(`community_id`, `community_join_code`, `community_name`, `locality`, `pincode`, `city`, `state`,`created_datetime`, `members_count`, `description`, `access`, `last_updated_datetime`) 
+(`community_id`, `community_join_code`, `community_name`, `locality`, `pincode`, `city`, `state`,`created_datetime`, `members_count`, `description`, `access`, `last_updated`) 
 VALUES 
 ('o356445656454', 'cfjdfj', 'VIT Club', 'Bibewadi', '411037', 'Pune', 'Maharashtra','2023-08-24 04:45:23.000000', '1', 'Community of VIT for Health', 'Open', NULL);
 
 
-INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', '6Z9Jp5dgq9YkzhkPOhGCf63yjQx2', 'Creator', '2023-08-18 07:59:41.000000', NULL);
-INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'defxyz', 'Member', '2023-08-18 08:00:17.000000', NULL);
-INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'ghixyz', 'Member', '2023-08-18 08:00:47.000000', NULL);
+INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`) VALUES (NULL, 'o1234567890', '6Z9Jp5dgq9YkzhkPOhGCf63yjQx2', 'Creator', '2023-08-18 07:59:41.000000');
+INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`) VALUES (NULL, 'o1234567890', 'defxyz', 'Member', '2023-08-18 08:00:17.000000');
+INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`) VALUES (NULL, 'o1234567890', 'ghixyz', 'Member', '2023-08-18 08:00:47.000000');
 
-INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'mno789', 'Creator', '2023-08-18 07:59:41.000000', NULL);
-INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'jkl456', 'Member', '2023-08-18 08:00:17.000000', NULL);
-INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`, `last_active_datetime`) VALUES (NULL, 'o1234567890', 'ghi789', 'Member', '2023-08-18 08:00:47.000000', NULL);
+INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`) VALUES (NULL, 'o1234567890', 'mno789', 'Creator', '2023-08-18 07:59:41.000000');
+INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`) VALUES (NULL, 'o1234567890', 'jkl456', 'Member', '2023-08-18 08:00:17.000000');
+INSERT INTO `CommunityUserMapping` (`community_user_mapping_id`, `community_id`, `user_id`, `role`, `join_date`) VALUES (NULL, 'o1234567890', 'ghi789', 'Member', '2023-08-18 08:00:47.000000');
 
-
-INSERT INTO `Seasons` 
-(`season_id`, `name`, `start_date`, `end_date`, `num_challenges`, `active`, `created_by_user_id`, `created_datetime`, `last_updated_datetime`, `description`, `min_to_comply`) 
-VALUES 
-('s123456789034', 'Season 1', '2023-07-05', '2023-11-16', NULL, '0', '["6Z9Jp5dgq9YkzhkPOhGCf63yjQx2"]', '2023-08-18 06:10:30.000000', NULL, 'This is the 1st season', NULL);
 
 INSERT INTO `Seasons` 
-(`season_id`, `name`, `start_date`, `end_date`, `num_challenges`, `active`, `created_by_user_id`, `created_datetime`, `last_updated_datetime`, `description`, `min_to_comply`) 
+(`season_id`, `name`, `start_date`, `end_date`, `num_challenges`, `active`, `created_by_user_id`, `created_datetime`, `last_updated`, `description`) 
 VALUES 
-('s4897478934789', 'VIT Season 1', '2023-07-08', '2024-11-16', NULL, '0', '["mno789"]', '2023-08-18 06:10:30.000000', NULL, 'This is VIT club 1st season', NULL);
+('s123456789034', 'Season 1', '2023-07-05', '2023-11-16', NULL, '0', '["6Z9Jp5dgq9YkzhkPOhGCf63yjQx2"]', '2023-08-18 06:10:30.000000', NULL, 'This is the 1st season');
+
+INSERT INTO `Seasons` 
+(`season_id`, `name`, `start_date`, `end_date`, `num_challenges`, `active`, `created_by_user_id`, `created_datetime`, `last_updated`, `description`) 
+VALUES 
+('s4897478934789', 'VIT Season 1', '2023-07-08', '2024-11-16', NULL, '0', '["mno789"]', '2023-08-18 06:10:30.000000', NULL, 'This is VIT club 1st season');
 
 
 
@@ -96,12 +96,12 @@ VALUES
 
 
 INSERT INTO `Challenges` 
-(`challenge_id`, `community_head_user_id`, `challenge_name`, `description`, `start_date`, `end_date`, `created_datetime`, `season_id`, `active`, `last_updated_datetime`)
+(`challenge_id`, `created_by`, `challenge_name`, `description`, `start_date`, `end_date`, `created_datetime`, `season_id`, `active`, `last_updated`)
 VALUES 
 ('c24859790233903', '6Z9Jp5dgq9YkzhkPOhGCf63yjQx2', '30-Day Fitness Challenge', 'Join us for a month of fitness activities!', '2023-10-01', '2023-10-31', '2023-09-20 14:30:00', 's123456789034', true, '2023-09-20 14:30:00');
 
 INSERT INTO `Challenges` 
-(`challenge_id`, `community_head_user_id`, `challenge_name`, `description`, `start_date`, `end_date`, `created_datetime`, `season_id`, `active`, `last_updated_datetime`)
+(`challenge_id`, `created_by`, `challenge_name`, `description`, `start_date`, `end_date`, `created_datetime`, `season_id`, `active`, `last_updated`)
 VALUES 
 ('c8968798656900', 'mno789', '30-Day Being Fit Challenge', 'Join us for a month of fitness activities!', '2023-10-01', '2023-10-31', '2023-09-20 14:30:00', 's4897478934789', true, '2023-09-20 14:30:00');
 
