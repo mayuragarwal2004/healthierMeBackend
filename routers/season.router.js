@@ -1,5 +1,5 @@
 const express = require('express')
-const {createSeasonController, readSeasonController} = require('./../controllers/season.controller')
+const {createSeasonController, readSeasonController, listSeasonController} = require('./../controllers/season.controller')
 const seasonRouter = express.Router();
 
 // @route Post /api/season/create
@@ -11,5 +11,7 @@ seasonRouter.post('/create', createSeasonController)
 // @desc Read Whole season object - body : seasonId
 // @access Users registered in the community - middleware to be included
 seasonRouter.post('/read', readSeasonController)
+
+seasonRouter.post('/list', listSeasonController)
 
 module.exports = seasonRouter

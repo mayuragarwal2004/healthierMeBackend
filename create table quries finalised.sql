@@ -19,7 +19,8 @@ CREATE TABLE HealthierMe.User (
     height FLOAT,
     weight FLOAT,
     profile_picture VARCHAR(255),
-    notification_settings TEXT
+    notification_settings TEXT,
+    deleted BOOLEAN DEFAULT false
 );
 
 CREATE TABLE HealthierMe.Community (
@@ -35,7 +36,8 @@ CREATE TABLE HealthierMe.Community (
     members_count INT DEFAULT 1,                    -- has to be updated
     description TEXT, 
     access ENUM('Open', 'Admin_control', 'Predefined'),
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP                           --length shortend 
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT false
 );
 
 CREATE TABLE HealthierMe.CommunityUserMapping (
@@ -44,7 +46,8 @@ CREATE TABLE HealthierMe.CommunityUserMapping (
     user_id VARCHAR(255) NOT NULL,
     role ENUM('Member', 'Admin', 'Creator') NOT NULL,
     join_date DATETIME NOT NULL,
-    --last_active_datetime DATETIME,          not needed
+    -- last_active_datetime DATETIME,          not needed
+    deleted BOOLEAN DEFAULT false,
     UNIQUE KEY unique_community_user (community_id, user_id), -- Ensures each user can have only one role per community
     FOREIGN KEY (community_id) REFERENCES Community(community_id),
     FOREIGN KEY (user_id) REFERENCES User(user_id)
@@ -59,8 +62,9 @@ CREATE TABLE HealthierMe.Seasons (
     num_challenges INT,             -- has to be updated with every challenge
     active BOOLEAN DEFAULT false,
     created_by_user_id VARCHAR(255), -- Optional, if applicable
-    created_datetime DATETIME NOT NULL,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    created_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT false
     -- min_to_comply INT /* less than num_challenges */ not applicable
 );
 
@@ -69,6 +73,7 @@ CREATE TABLE HealthierMe.CommunitySeasonMapping (
     community_id VARCHAR(255) NOT NULL,
     season_id VARCHAR(255) NOT NULL,
     join_date DATETIME NOT NULL,
+    deleted BOOLEAN DEFAULT false,
     UNIQUE KEY unique_community_season (community_id, season_id), -- Ensures each community can have only one entry per season
     FOREIGN KEY (community_id) REFERENCES Community(community_id), -- Assuming you have a "Community" table
     FOREIGN KEY (season_id) REFERENCES Seasons(season_id) /* -- Assuming you have a "Seasons" table */
@@ -84,7 +89,8 @@ CREATE TABLE HealthierMe.Challenges (
     created_datetime DATETIME NOT NULL,
     season_id VARCHAR(255), 
     active BOOLEAN DEFAULT false, 
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (created_by) REFERENCES User(user_id),
     FOREIGN KEY (season_id) REFERENCES Seasons(season_id)
 );
@@ -96,7 +102,8 @@ CREATE TABLE HealthierMe.Groups (
     num_opts INT,
     min_to_comp INT,
     activity JSON, -- Store as JSON or serialized data, depending on the database capabilities
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
 );
 
@@ -114,7 +121,8 @@ CREATE TABLE HealthierMe.Tasks (
     times_to_complete INT,
     start_date DATE,
     end_date DATE,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
     FOREIGN KEY (g_id) REFERENCES Groups(g_id) -- check to not create problems in referencing blanks
 );
@@ -128,19 +136,21 @@ CREATE TABLE HealthierMe.Events (
     start_date DATE,
     end_date DATE,
     event_frequency INT,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
     FOREIGN KEY (g_id) REFERENCES Groups(g_id)
 );
 
 CREATE TABLE HealthierMe.ActivityStatus (
     user_id VARCHAR(255) NOT NULL,
-    --challenge_id VARCHAR(255) NOT NULL,
+    -- challenge_id VARCHAR(255) NOT NULL,
     activity_id VARCHAR(255) NOT NULL,
     date DATE NOT NULL,
     timestamp DATETIME NOT NULL,
     quantity INT,
+    deleted BOOLEAN DEFAULT false,
     PRIMARY KEY (user_id, activity_id, timestamp), -- challenge id not needed, date replaced by timestamp
-    FOREIGN KEY (user_id) REFERENCES User(user_id),
-    --FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+    -- FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
 );
