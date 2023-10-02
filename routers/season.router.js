@@ -12,6 +12,9 @@ seasonRouter.post('/create', createSeasonController)
 // @access Users registered in the community - middleware to be included
 seasonRouter.post('/read', readSeasonController)
 
+// @route Post /api/season/list
+// @desc List all seasons of a given community ID - body : uID, communityId
+// @access Users registered in the community - middleware to be included
 seasonRouter.post('/list', listSeasonController)
 
 module.exports = seasonRouter
