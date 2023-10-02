@@ -62,7 +62,7 @@ const listChallenges = async (uID, communityId, seasonId) => {
 
     const queryResult = await new Promise((resolve, reject) => {
       con.query(
-        `SELECT C.challenge_id, C.challenge_name, C.description, C.start_date, C.end_date, C.active, C.last_updated_datetime
+        `SELECT C.challenge_id, C.challenge_name, C.description, C.start_date, C.end_date, C.active, C.last_updated
         FROM HealthierMe.Challenges AS C
         WHERE C.season_id = '${seasonId}';`,
         (err, result, fields) => {

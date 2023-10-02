@@ -20,9 +20,9 @@ app.use(cors());
 //   console.log("Result: " + result);
 // });
 
-// app.use('/api/challenge', challengeRouter)
 app.use('/api/user', userRouter)
 app.use('/api/community', communityRouter)
 app.use('/api/season', seasonRouter)
+app.use('/api/challenge', challengeRouter)
 
 app.listen(5001, () => console.log("listening"));
