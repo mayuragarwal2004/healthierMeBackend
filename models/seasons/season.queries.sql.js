@@ -4,16 +4,25 @@ var mysql = require("mysql");
 const { verifyUserCommunity } = require("../community/community.queries.sql");
 
 const readSeason = async (sId) => {
-  let seasonObj = await Season.findOne({ sId: sId }).catch((err) => {
-    console.log(err);
-    return -1;
-  });
-  // console.log(seasonObj)
-  if (seasonObj != null) {
-    return seasonObj.toObject();
-  }
 
-  return seasonObj;
+  queryResult = await new Promise((resolve, reject)=>{
+    con.query(
+      `SELECT * FROM HealthierMe.Seasons WHERE season_id='${sId}' `,
+      function (err, result, fields) {
+        if (err) {
+          reject(err) 
+          }
+        else resolve(result);
+      }
+    )
+  }).catch((err)=>{
+    console.log(err)
+    return -1;
+  }
+    )
+  
+  return queryResult[0]
+  
 };
 
 const validateSeason = async (seasonObj) => {
@@ -22,17 +31,15 @@ const validateSeason = async (seasonObj) => {
     !seasonObj.sName ||
     !seasonObj.sStart ||
     !seasonObj.sEnd ||
-    !seasonObj.challengeNo
+    !seasonObj.active ||     
+    !seasonObj.userId ||
+    !seasonObj.desc
+
   ) {
     return false;
   }
 
-  if (
-    await Season.findOne({ sId: seasonObj.sId }).catch((err) => {
-      console.log(err);
-      return -1;
-    })
-  ) {
+  if (await readSeason(seasonObj.sId)) {
     return false;
   }
 
@@ -40,12 +47,29 @@ const validateSeason = async (seasonObj) => {
 };
 
 const createSeason = async (sObj) => {
-  const createSeasonMain = await Season.create(sObj).catch((err) => {
-    console.log(err);
-    return -1;
-  });
+  const {sId, sName, sStart, sEnd, challengeNo, active, userId, desc } = sObj
 
-  return createSeasonMain;
+  queryResult = await new Promise((resolve, reject)=>{
+    con.query(
+      `INSERT INTO HealthierMe.Seasons
+      (season_id, name, start_date, end_date, num_challenges, active, created_by_user_id, created_datetime, last_updated, description) 
+      VALUES 
+      ('${sId}', '${sName}', '${sStart}', '${sEnd}', '${challengeNo}', '${active}', '${userId}', '${(new Date).toISOString().slice(0, 19).replace('T', ' ')}', '${(new Date).toISOString().slice(0, 19).replace('T', ' ')}', '${desc}');
+       `,
+      function (err, result, fields) {
+        if (err) {
+          reject(err) 
+          }
+        else resolve(result);
+      }
+    )
+  }).catch((err)=>{
+    console.log(err)
+    return -1;
+  }
+    )
+  return queryResult
+
 };
 
 const listSeasons = async (uID, communityId) => {
@@ -84,3 +108,8 @@ const listSeasons = async (uID, communityId) => {
 };
 
 module.exports = { createSeason, validateSeason, readSeason, listSeasons };
+
+
+//Things to correct
+// Indian dateTime
+// fix Null check

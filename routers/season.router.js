@@ -1,5 +1,6 @@
 const express = require('express')
 const {createSeasonController, readSeasonController, listSeasonController} = require('./../controllers/season.controller')
+// const {readSeason, createSeason} = require('../models/seasons/season.queries.sql')
 const seasonRouter = express.Router();
 
 // @route Post /api/season/create
@@ -16,5 +17,9 @@ seasonRouter.post('/read', readSeasonController)
 // @desc List all seasons of a given community ID - body : uID, communityId
 // @access Users registered in the community - middleware to be included
 seasonRouter.post('/list', listSeasonController)
+
+// seasonRouter.post('/trialc', createSeason)
+
+// seasonRouter.get('/try/:id', readSeason)
 
 module.exports = seasonRouter

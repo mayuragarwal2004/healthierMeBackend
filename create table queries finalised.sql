@@ -124,7 +124,7 @@ CREATE TABLE HealthierMe.Tasks (
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
-    FOREIGN KEY (g_id) REFERENCES Groups(g_id) -- check to not create problems in referencing blanks
+    FOREIGN KEY (g_id) REFERENCES HealthierMe.Groups(g_id) -- check to not create problems in referencing blanks
 );
 
 CREATE TABLE HealthierMe.Events (
@@ -139,7 +139,7 @@ CREATE TABLE HealthierMe.Events (
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
-    FOREIGN KEY (g_id) REFERENCES Groups(g_id)
+    FOREIGN KEY (g_id) REFERENCES HealthierMe.Groups(g_id)
 );
 
 CREATE TABLE HealthierMe.ActivityStatus (
