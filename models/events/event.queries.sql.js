@@ -1,7 +1,7 @@
 const con = require("../../connection.sql");
 var mysql = require("mysql");
 
-const readEventByEid = async(eId) =>{
+const readEventByEid = async (eId) => {
   queryResult = await new Promise((resolve, reject) => {
     con.query(
       `SELECT * FROM HealthierMe.Events WHERE event_id='${eId}' `,
@@ -17,9 +17,9 @@ const readEventByEid = async(eId) =>{
   });
 
   return queryResult[0];
-  }
+};
 
-const readEventByCid = async(cId) =>{
+const readEventByCid = async (cId) => {
   queryResult = await new Promise((resolve, reject) => {
     con.query(
       `SELECT * FROM HealthierMe.Events WHERE challenge_id='${cId}' `,
@@ -35,52 +35,61 @@ const readEventByCid = async(cId) =>{
   });
 
   return queryResult[0];
+};
+
+const validateEvent = async (eItem) => {
+  if (
+    !eItem.eId ||
+    !eItem.eName ||
+    !eItem.eDesc ||
+    !eItem.eFreq ||
+    !eItem.eStart ||
+    !eItem.eEnd
+  ) {
+    return false;
   }
 
-const validateEvent = async(eItem) =>{
-    if(!eItem.eId || !eItem.eName || !eItem.eDesc || !eItem.eFreq || !eItem.eStart || !eItem.eEnd){
-        return false
+  if (await readEventByEid(eItem.eId)) {
+    console.log(err);
+    return false;
+  }
+
+  return true;
+};
+
+const createCEvent = async (cId, eventArr) => {
+  for (let i = 0; i < eventArr.length; i++) {
+    const { eId, eName, eDesc, eFreq, eStart, eEnd, gId } = eventArr[i];
+    let mainGId = "";
+    let sqlGId = "";
+    if (gId) {
+      sqlGId = ", " + "g_id";
+      mainGId = ", \'" + gId + "\'";
     }
-
-    if(await readEventByEid(eItem.eId)){
-        console.log(err);
-        return false;
-      }
-  
-    return true
-
-}
-
-const createCEvent = async(cId, eventArr)=>{
-  for (let i  = 0; i<eventArr.length; i++){
-
-    const {eId, eName, eDesc, eFreq, eStart, eEnd} = eventArr[i]
-
-  queryResult = await new Promise((resolve, reject)=>{
-    con.query(
-      `INSERT INTO HealthierMe.Events
-      (event_id, challenge_id, event_name, event_description, start_date, end_date, event_frequency) 
+    queryResult = await new Promise((resolve, reject) => {
+      con.query(
+        `INSERT INTO HealthierMe.Events
+      (event_id, challenge_id, event_name, event_description, start_date, end_date, event_frequency${sqlGId}) 
       VALUES 
-      ('${eId}', '${cId}', '${eName}', '${eDesc}', '${eStart}', '${eEnd}', '${eFreq}');
+      ('${eId}', '${cId}', '${eName}', '${eDesc}', '${eStart}', '${eEnd}', '${eFreq}' ${mainGId} );
        `,
-      function (err, result, fields) {
-        if (err) {
-          reject(err) 
-          }
-        else resolve(result);
-      }
-    )
-  }).catch((err)=>{
-    console.log(err)
-    return -1;
+        function (err, result, fields) {
+          if (err) {
+            reject(err);
+          } else resolve(result);
+        }
+      );
+    }).catch((err) => {
+      console.log(err);
+      return -1;
+    });
+    if (queryResult == -1) {
+      return -1;
+    }
   }
-    )
-  }
-  
-  return true
-    
 
-}
+  return true;
+};
 
 const listEvents = async (uID, communityId, challengeId) => {
   if (!uID || !communityId || !challengeId) {
@@ -115,4 +124,10 @@ const listEvents = async (uID, communityId, challengeId) => {
   }
 };
 
-module.exports = { createCEvent, validateEvent, listEvents, readEventByCid, readEventByEid };
+module.exports = {
+  createCEvent,
+  validateEvent,
+  listEvents,
+  readEventByCid,
+  readEventByEid,
+};

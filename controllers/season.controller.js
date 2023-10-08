@@ -84,20 +84,21 @@ const createSeasonController = async (req, res) => {
   let challengeIds = []; //for adding into seasons object
   const challengeArr = req.body.challenge;
   const seasonObj = req.body.season;
+  userId = seasonObj.userId;
   // console.log(challengeArr)
 
   if (!seasonObj || !(await validateSeason(seasonObj))) {
-    return res.status(400).send("Insufficient/ Wrong inputs");
+    return res.status(400).send("Season validation failed");
   }
 
   if (!challengeArr) {
-    return res.status(400).send("Insufficient inputs");
+    return res.status(400).send("No Challenges entered");
   }
 
   //checking whole challenge array
   for (i in challengeArr) {
-    let { cId, cName, cDesc, cStart, cEnd } = challengeArr[i];
-    let cObj = { cId, cName, cDesc, cStart, cEnd };
+    let { cId, cName, cDesc, cStart, cEnd, active, desc} = challengeArr[i];
+    let cObj = { cId, cName, cDesc, cStart, cEnd, active, userId, desc};
     let taskArr = challengeArr[i].task;
     let eventArr = challengeArr[i].event;
     let groupArr = challengeArr[i].group;
@@ -136,14 +137,14 @@ const createSeasonController = async (req, res) => {
     }
   }
 
-  //enter data into mongo
+  //enter data into sql
   for (i in challengeArr) {
-    let { cId, cName, cDesc, cStart, cEnd } = challengeArr[i];
-    let cObj = { cId, cName, cDesc, cStart, cEnd };
+    let { cId, cName, cDesc, cStart, cEnd, active, desc } = challengeArr[i];
+    let cObj = { cId, cName, cDesc, cStart, cEnd, active, userId, desc };
     let taskArr = challengeArr[i].task;
     let eventArr = challengeArr[i].event;
     let groupArr = challengeArr[i].group;
-    let sObj = { ...seasonObj, challengeIds };
+    let sObj = { ...seasonObj};
 
     if ((await createSeason(sObj)) == -1) {
       return res.status(400).send("Error creating Season");
@@ -151,6 +152,10 @@ const createSeasonController = async (req, res) => {
 
     if ((await createChallenge(seasonObj.sId, cObj)) == -1) {
       return res.status(400).send("Error creating Challenge");
+    }
+
+    if ((await createCGroup(cId, groupArr)) == -1) {
+      return res.status(400).send("Error creating Group");
     }
 
     if ((await createCTask(cId, taskArr)) == -1) {
@@ -161,9 +166,7 @@ const createSeasonController = async (req, res) => {
       return res.status(400).send("Error creating Event");
     }
 
-    if ((await createCGroup(cId, groupArr)) == -1) {
-      return res.status(400).send("Error creating Group");
-    }
+    
   }
   return res.status(200).send("Form submitted successfully");
 };

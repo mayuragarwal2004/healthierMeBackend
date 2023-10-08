@@ -86,7 +86,7 @@ CREATE TABLE HealthierMe.Challenges (
     description TEXT,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    created_datetime DATETIME NOT NULL,
+    created_datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     season_id VARCHAR(255), 
     active BOOLEAN DEFAULT false, 
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -101,7 +101,8 @@ CREATE TABLE HealthierMe.Groups (
     challenge_id VARCHAR(255) NOT NULL,
     num_opts INT,
     min_to_comp INT,
-    activity JSON, -- Store as JSON or serialized data, depending on the database capabilities
+    -- activity JSON, -- Store as JSON or serialized data, depending on the database capabilities *not needed*
+    created_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
@@ -115,12 +116,13 @@ CREATE TABLE HealthierMe.Tasks (
     task_description TEXT,
     task_quantity INT,
     task_unit VARCHAR(50),
-    task_period INT,
-    task_period_unit ENUM('day', 'month'),
-    task_number INT,
+    -- task_period INT, --not needed
+    task_period_unit ENUM('daily', 'monthly', 'yearly'),
+    -- task_number INT, --not needed
     times_to_complete INT,
     start_date DATE,
     end_date DATE,
+    created_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
@@ -136,6 +138,7 @@ CREATE TABLE HealthierMe.Events (
     start_date DATE,
     end_date DATE,
     event_frequency INT,
+    created_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted BOOLEAN DEFAULT false,
     FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id),
@@ -148,6 +151,8 @@ CREATE TABLE HealthierMe.ActivityStatus (
     activity_id VARCHAR(255) NOT NULL,
     date DATE NOT NULL,
     timestamp DATETIME NOT NULL,
+    created_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     quantity INT,
     deleted BOOLEAN DEFAULT false,
     PRIMARY KEY (user_id, activity_id, timestamp), -- challenge id not needed, date replaced by timestamp

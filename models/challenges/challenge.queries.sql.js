@@ -40,7 +40,7 @@ const validateChallenge = async (cObj) => {
   }
   try {
     if (
-      (await readChallenge(cId)) 
+      (await readChallenge(cObj.cId)) 
       // ||
       // (await Task.findOne({ cId: cObj.cId })) ||
       // (await Event.findOne({ cId: cObj.cId })) ||
@@ -62,9 +62,9 @@ const createChallenge = async (sId, cObj) => {
   queryResult = await new Promise((resolve, reject)=>{
     con.query(
       `INSERT INTO HealthierMe.Challenges
-      (challenge_id, created_by, challenge_name, description, start_date, end_date, created_datetime, season_id, active, last_updated) 
+      (challenge_id, created_by, challenge_name, description, start_date, end_date, season_id, active) 
       VALUES 
-      ('${cId}', '${userId}', '${cName}', '${cDesc}', '${cStart}', '${cEnd}', '${(new Date).toISOString().slice(0, 19).replace('T', ' ')}', ${sId},'${active}','${(new Date).toISOString().slice(0, 19).replace('T', ' ')}');
+      ('${cId}', '${userId}', '${cName}', '${cDesc}', '${cStart}', '${cEnd}', '${sId}','${active}');
        `,
       function (err, result, fields) {
         if (err) {

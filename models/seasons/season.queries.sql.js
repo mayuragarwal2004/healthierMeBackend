@@ -52,9 +52,9 @@ const createSeason = async (sObj) => {
   queryResult = await new Promise((resolve, reject)=>{
     con.query(
       `INSERT INTO HealthierMe.Seasons
-      (season_id, name, start_date, end_date, num_challenges, active, created_by_user_id, created_datetime, last_updated, description) 
+      (season_id, name, start_date, end_date, num_challenges, active, created_by_user_id, description) 
       VALUES 
-      ('${sId}', '${sName}', '${sStart}', '${sEnd}', '${challengeNo}', '${active}', '${userId}', '${(new Date).toISOString().slice(0, 19).replace('T', ' ')}', '${(new Date).toISOString().slice(0, 19).replace('T', ' ')}', '${desc}');
+      ('${sId}', '${sName}', '${sStart}', '${sEnd}', '${challengeNo}', '${active}', '${userId}', '${desc}');
        `,
       function (err, result, fields) {
         if (err) {
