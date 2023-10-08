@@ -1,23 +1,26 @@
 const {
   createCTask,
   validateTask,
-  readTask,
-} = require("../models/tasks/task.queries");
+  readTaskByCid,
+  readTaskByTid
+} = require("../models/tasks/task.queries.sql");
 const {
   createCEvent,
   validateEvent,
-  readEvent,
-} = require("../models/events/event.queries");
+  readEventByCid,
+  readEventByEid
+} = require("../models/events/event.queries.sql");
 const {
   createCGroup,
   validateGroup,
-  readGroup,
-} = require("../models/groups/group.queries");
+  readGroupByCid,
+  readGroupByGid
+} = require("../models/groups/group.queries.sql");
 const {
   validateChallenge,
   createChallenge,
   readChallenge,
-} = require("../models/challenges/challenge.queries");
+} = require("../models/challenges/challenge.queries.sql");
 const {
   validateSeason,
   createSeason,
@@ -53,15 +56,15 @@ const readSeasonController = async (req, res) => {
     let { cId } = challengeObj;
 
     //for every challenge id, get tasks, events, groups
-    let groupArr = await readGroup(cId);
+    let groupArr = await readGroupByCid(cId);
     if (groupArr == -1) {
       return res.status(400).send("Error getting Groups");
     }
-    let eventArr = await readEvent(cId);
+    let eventArr = await readEventByCid(cId);
     if (eventArr == -1) {
       return res.status(400).send("Error getting Events");
     }
-    let taskArr = await readTask(cId);
+    let taskArr = await readTaskByCid(cId);
     if (taskArr == -1) {
       return res.status(400).send("Error getting Tasks");
     }
@@ -146,7 +149,7 @@ const createSeasonController = async (req, res) => {
       return res.status(400).send("Error creating Season");
     }
 
-    if ((await createChallenge(cObj)) == -1) {
+    if ((await createChallenge(seasonObj.sId, cObj)) == -1) {
       return res.status(400).send("Error creating Challenge");
     }
 

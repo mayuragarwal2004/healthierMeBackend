@@ -8,28 +8,43 @@ const Task = require("../tasks/task.model");
 const Group = require("../groups/group.model");
 
 const readChallenge = async (cId) => {
-  const challengeObj = await Challenge.findOne({ cId: cId }).catch((err) => {
+  queryResult = await new Promise((resolve, reject) => {
+    con.query(
+      `SELECT * FROM HealthierMe.Challenges WHERE challenge_id='${cId}' `,
+      function (err, result, fields) {
+        if (err) {
+          reject(err);
+        } else resolve(result);
+      }
+    );
+  }).catch((err) => {
     console.log(err);
     return -1;
   });
 
-  if (challengeObj != null) {
-    return challengeObj.toObject();
-  }
-
-  return challengeObj;
+  return queryResult[0];
 };
 
 const validateChallenge = async (cObj) => {
-  if (!cObj.cId || !cObj.cName || !cObj.cDesc || !cObj.cStart || !cObj.cEnd) {
+  if (
+    !cObj.cId ||
+    !cObj.cName ||
+    !cObj.cDesc ||
+    !cObj.cStart ||
+    !cObj.cEnd ||
+    !cObj.active ||
+    !cObj.userId ||
+    !cObj.desc
+  ) {
     return false;
   }
   try {
     if (
-      (await Challenge.findOne({ cId: cObj.cId })) ||
-      (await Task.findOne({ cId: cObj.cId })) ||
-      (await Event.findOne({ cId: cObj.cId })) ||
-      (await Group.findOne({ cId: cObj.cId }))
+      (await readChallenge(cId)) 
+      // ||
+      // (await Task.findOne({ cId: cObj.cId })) ||
+      // (await Event.findOne({ cId: cObj.cId })) ||
+      // (await Group.findOne({ cId: cObj.cId }))
     ) {
       return false;
     }
@@ -41,13 +56,29 @@ const validateChallenge = async (cObj) => {
   return true;
 };
 
-const createChallenge = async (cObj) => {
-  const createChallengeMain = await Challenge.create(cObj).catch((err) => {
-    console.log(err);
-    return -1;
-  });
+const createChallenge = async (sId, cObj) => {
+  const {cId, cName, cDesc, cStart, cEnd, active, userId} = cObj
 
-  return createChallengeMain;
+  queryResult = await new Promise((resolve, reject)=>{
+    con.query(
+      `INSERT INTO HealthierMe.Challenges
+      (challenge_id, created_by, challenge_name, description, start_date, end_date, created_datetime, season_id, active, last_updated) 
+      VALUES 
+      ('${cId}', '${userId}', '${cName}', '${cDesc}', '${cStart}', '${cEnd}', '${(new Date).toISOString().slice(0, 19).replace('T', ' ')}', ${sId},'${active}','${(new Date).toISOString().slice(0, 19).replace('T', ' ')}');
+       `,
+      function (err, result, fields) {
+        if (err) {
+          reject(err) 
+          }
+        else resolve(result);
+      }
+    )
+  }).catch((err)=>{
+    console.log(err)
+    return -1;
+  }
+    )
+  return queryResult
 };
 
 const listChallenges = async (uID, communityId, seasonId) => {
