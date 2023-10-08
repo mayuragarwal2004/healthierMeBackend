@@ -114,4 +114,4 @@ const listTasks = async (uID, communityId, challengeId) => {
   }
 };
 
-module.exports = { createCTask, validateTask, readTask, listTasks, readTaskByTid, readTaskByCid };
+module.exports = { createCTask, validateTask, listTasks, readTaskByTid, readTaskByCid };

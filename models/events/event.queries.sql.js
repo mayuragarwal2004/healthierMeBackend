@@ -115,4 +115,4 @@ const listEvents = async (uID, communityId, challengeId) => {
   }
 };
 
-module.exports = { createCEvent, validateEvent, listEvents, readEventByCid };
+module.exports = { createCEvent, validateEvent, listEvents, readEventByCid, readEventByEid };
