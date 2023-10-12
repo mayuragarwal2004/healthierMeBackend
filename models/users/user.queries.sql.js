@@ -2,25 +2,90 @@ const User = require("./user.model");
 const con = require("../../connection.sql");
 var mysql = require("mysql");
 
-const readUser = async (uId) => {
-  let userObj = await User.findOne({ uId: uId }).catch((err) => {
-    console.log(err);
-    return -1;
-  });
-
-  return userObj;
-};
-
-const checkMId = async (uId, mId) => {
-  let { mIds } = await User.findOne({ uId: uId }).catch((err) => {
-    console.log(err);
-    return -1; //501
-  });
-  if (mIds.indexOf(mId) == -1) {
-    return -2;
+async function validateEmail (email) {
+  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  
+  
+  if (!email.match(validRegex)) {
+    return false;
   }
-  return True;
+
+  queryResult = await new Promise((resolve, reject)=>{
+    con.query(
+      `SELECT * FROM HealthierMe.User WHERE email = '${email}';`,
+      function (err, result, fields) {
+        if (err) {
+          reject(err) 
+          }
+        else resolve(result);
+      }
+    )
+  }).catch((err)=>{
+    console.log(err)
+    return -1;
+  }
+    )
+
+  console.log(queryResult[0])
+
+  if (queryResult[0]) {
+    return false;
+  }
+  
+  return true
+
+}
+
+const readUserByPhone = async (phone) => {
+  queryResult = await new Promise((resolve, reject)=>{
+    con.query(
+      `SELECT * FROM HealthierMe.User WHERE phone= '${phone}';`,
+      function (err, result, fields) {
+        if (err) {
+          reject(err) 
+          }
+        else resolve(result);
+      }
+    )
+  }).catch((err)=>{
+    console.log(err)
+    return -1;
+  }
+    )
+  
+  return queryResult[0]
 };
+
+const readUserByUId = async (uId) => {
+  queryResult = await new Promise((resolve, reject)=>{
+    con.query(
+      `SELECT * FROM HealthierMe.User WHERE user_id='${uId}'; `,
+      function (err, result, fields) {
+        if (err) {
+          reject(err) 
+          }
+        else resolve(result);
+      }
+    )
+  }).catch((err)=>{
+    console.log(err)
+    return -1;
+  }
+    )
+  
+  return queryResult[0]
+};
+
+// const checkMId = async (uId, mId) => {
+//   let { mIds } = await User.findOne({ uId: uId }).catch((err) => {
+//     console.log(err);
+//     return -1; //501
+//   });
+//   if (mIds.indexOf(mId) == -1) {
+//     return -2;
+//   }
+//   return True;
+// };
 
 const existUser = async (uItem) => {
   if (!uItem.phone) {
@@ -83,41 +148,66 @@ const existUser = async (uItem) => {
 const validateUser = async (uItem) => {
   if (
     !uItem.uId ||
-    !uItem.name ||
+    !uItem.firstName ||
+    !uItem.lastName ||
     !uItem.phone ||
-    !uItem.email ||
     !uItem.dob ||
-    !uItem.address ||
+    !uItem.gender ||
+    !uItem.address.pincode ||
+    !uItem.address.locality ||
     !uItem.address.city ||
     !uItem.address.state ||
-    !uItem.address.area
+    !(uItem.phone.match(/^\d{10}$/)) ||
+    !(uItem.gender == 'Male' || uItem.gender == 'Female' || uItem.gender == 'Other' )
   ) {
     return 0;
   }
-
-  if (
-    con.query(
-      "SELECT * FROM user WHERE phone=992118237",
-      function (err, result, fields) {
-        if (err) throw err;
-
-        if (result.length == 0) return -1;
-      }
-    )
-  ) {
-    return -2;
+  if (uItem.email && !await validateEmail(uItem.email)) {
+    return 0;
   }
+  let existUser = await readUserByPhone(uItem.phone)
+  let existUser2 = await readUserByUId(uItem.uId)
+  if (existUser == -1 || existUser2 == -1) {
+    return -1;
+  } 
+  else if (existUser || existUser2) {
+  return -2;
+}
+
   return 1;
-};
+}
 
 const createUser = async (uItem) => {
-  const createUser = await User.create(uItem).catch((err) => {
-    console.log(err);
+  const {uId, firstName, lastName, middleName, email, phone, dob, gender, address, height, weight } = uItem
+  let sql_middle_name = (middleName)? ", middle_name" : ""
+  let main_middle_name = (middleName)? `, '${middleName}' ` : ""
+  let sql_email = (email)? ", email" : ""
+  let main_email = (email)? `, '${email}' ` : ""
+  let sql_height = (height)? ", height" : ""
+  let main_height = (height)? `, ${height} ` : ""
+  let sql_weight = (weight)? ", weight" : ""
+  let main_weight = (weight)? `, ${weight} ` : ""
+  queryResult = await new Promise((resolve, reject)=>{
+    con.query(
+      `INSERT INTO HealthierMe.User
+      (user_id, first_name, last_name ${sql_middle_name} ${sql_email}, phone, dob, gender, locality, pincode, city, state ${sql_height} ${sql_weight}) 
+      VALUES 
+      ('${uId}', '${firstName}', '${lastName}' ${main_middle_name} ${main_email}  ,'${phone}', '${dob}', '${gender}', '${address.locality}', '${address.pincode}', '${address.city}' , '${address.state}' ${main_height} ${main_weight});
+       `,
+      function (err, result, fields) {
+        if (err) {
+          reject(err) 
+          }
+        else resolve(result);
+      }
+    )
+  }).catch((err)=>{
+    console.log(err)
     return -1;
-  });
-
-  return createUser;
+  }
+    )
+  return queryResult
 };
 
 // module.exports = { createUser, getMId, validateUser, readUser };
-module.exports = { createUser, validateUser, readUser, existUser };
+module.exports = { createUser, validateUser, readUserByPhone, readUserByUId, existUser };
