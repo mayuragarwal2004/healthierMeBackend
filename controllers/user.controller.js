@@ -44,17 +44,17 @@ const userCreateController = async (req, res) => {
   if (uObj == -1) {
     return res.status(500).send("Error creating User");
   }
-  return res.status(200).send("User created successfully");
+  return res.status(200).send(uObj);
 };
 
 const userExistController = async (req, res) => {
   let uItem = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   let vU = await existUser(uItem);
   if (!uItem || vU == 0) {
     return res.status(400).send("Insufficient inputs");
   }
-  console.log({ vU });
+  // console.log({ vU });
   switch (vU) {
     case 1:
       return res.status(200).send({ exists: true }); // User exists

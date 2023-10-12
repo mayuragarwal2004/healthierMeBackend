@@ -26,8 +26,6 @@ async function validateEmail (email) {
   }
     )
 
-  console.log(queryResult[0])
-
   if (queryResult[0]) {
     return false;
   }
@@ -206,7 +204,7 @@ const createUser = async (uItem) => {
     return -1;
   }
     )
-  return queryResult
+  return uItem;
 };
 
 // module.exports = { createUser, getMId, validateUser, readUser };

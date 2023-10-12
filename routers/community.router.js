@@ -1,10 +1,25 @@
 const express = require("express");
-const { allCommunityController } = require("./../controllers/community.controller");
+const { allCommunityController, readCommunityController, createCommunityController, joinCommunityController } = require("./../controllers/community.controller");
 const communityRouter = express.Router();
 
 // @route Post /api/community/list
 // @desc List all communities of a given user ID - body : uID
 // @access Users registered in the community - middleware to be included
 communityRouter.post("/list", allCommunityController);
+
+// @route Post /api/community/read
+// @desc read a community given community ID - body : communityId
+// @access Users registered in the community - middleware to be included
+communityRouter.post("/read", readCommunityController );
+
+// @route Post /api/community/create
+// @desc create a community
+// @access Users
+communityRouter.post("/create", createCommunityController);
+
+// @route Post /api/community/joincommunity
+// @desc join a community given user ID ,community ID, role - body : joinCode, userId, role
+// @access Users
+communityRouter.post("/joincommunity", joinCommunityController);
 
 module.exports = communityRouter;
