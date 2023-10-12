@@ -1,5 +1,6 @@
 const con = require("../../connection.sql");
 var mysql = require("mysql");
+const { verifyUserCommunity } = require("../community/community.queries.sql");
 
 const readEventByEid = async (eId) => {
   queryResult = await new Promise((resolve, reject) => {
