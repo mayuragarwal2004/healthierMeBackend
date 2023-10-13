@@ -155,7 +155,7 @@ const validateUser = async (uItem) => {
     !uItem.address.locality ||
     !uItem.address.city ||
     !uItem.address.state ||
-    !(uItem.phone.match(/^\d{10}$/)) ||
+    !(uItem.phone.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/) && uItem.phone[0] == '+') ||
     !(uItem.gender == 'Male' || uItem.gender == 'Female' || uItem.gender == 'Other' )
   ) {
     return 0;
