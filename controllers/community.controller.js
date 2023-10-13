@@ -1,5 +1,5 @@
 const con = require("../connection.sql");
-const { allCommunities, verifyUserCommunity, readCommunityByJoinCode, readCommunity, validateCommunity, createCommunity, joinCommunity, updateMemberCount } = require("../models/community/community.queries.sql");
+const { allCommunities, verifyUserCommunity, readCommunityByJoinCode, readCommunity, validateCommunity, createCommunity, joinCommunity, updateMemberCount, readUserCommunity } = require("../models/community/community.queries.sql");
 
 createJoinCode = async() => {
   let joinCode = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -13,6 +13,23 @@ createJoinCode = async() => {
     return createJoinCode();
   }
   return joinCode;
+}
+
+const readUserCommunityController = async(req, res) => {
+  const { communityId } = req.body;
+  if (!communityId) {
+    return res.status(400).send("Insufficient inputs");
+  }
+  const userCommunity = await readUserCommunity(communityId);
+  if (userCommunity == -1) {
+    return res.status(500).send("Error fetching user community");
+  }
+  if (!userCommunity) {
+    return res.status(404).send("User community not found");
+  }
+
+  return res.status(200).send(userCommunity);
+  
 }
 
 const allCommunityController = async (req, res) => {
@@ -123,4 +140,4 @@ const joinCommunityController = async (req, res) => {
   return res.status(200).send("User joined community successfully");
 } 
 
-module.exports = { allCommunityController, readCommunityController, createCommunityController, joinCommunityController};
+module.exports = { readUserCommunityController ,allCommunityController, readCommunityController, createCommunityController, joinCommunityController};

@@ -2,6 +2,28 @@ const { query } = require("express");
 const con = require("../../connection.sql");
 var mysql = require("mysql");
 
+const readUserCommunity = async(communityId)=>{
+  //query to read all users from a community
+  queryResult = await new Promise((resolve, reject)=>{
+    con.query(
+      `SELECT CommunityUserMapping.user_id, CommunityUserMapping.role, CommunityUserMapping.community_id, User.first_name, User.last_name, User.dob  FROM HealthierMe.CommunityUserMapping 
+      INNER JOIN HealthierMe.User on HealthierMe.CommunityUserMapping.user_id = HealthierMe.User.user_id
+      WHERE community_id='${communityId}';`
+      ,
+      function (err, result, fields) {
+        if (err) {
+          reject(err) 
+          }
+        else resolve(result);
+      }
+    )
+  }).catch((err)=>{
+    console.log(err)
+    return -1;
+  }
+    )
+    return queryResult;
+}
 const readCommunity = async (cId) => {
   queryResult = await new Promise((resolve, reject) => {
     con.query(
@@ -211,4 +233,4 @@ const verifyUserCommunity = async (uID, communityId) => {
   }
 };
 
-module.exports = { readCommunityByJoinCode, allCommunities, verifyUserCommunity, readCommunity, validateCommunity, createCommunity, joinCommunity, updateMemberCount };
+module.exports = { readUserCommunity, readCommunityByJoinCode, allCommunities, verifyUserCommunity, readCommunity, validateCommunity, createCommunity, joinCommunity, updateMemberCount };

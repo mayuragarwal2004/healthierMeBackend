@@ -1,5 +1,5 @@
 const express = require("express");
-const { allCommunityController, readCommunityController, createCommunityController, joinCommunityController } = require("./../controllers/community.controller");
+const {readUserCommunityController ,allCommunityController, readCommunityController, createCommunityController, joinCommunityController } = require("./../controllers/community.controller");
 const communityRouter = express.Router();
 
 // @route Post /api/community/list
@@ -21,5 +21,10 @@ communityRouter.post("/create", createCommunityController);
 // @desc join a community given user ID ,community ID, role - body : joinCode, userId, role
 // @access Users
 communityRouter.post("/joincommunity", joinCommunityController);
+
+// @route Post /api/community/readUserCommunity
+// @desc get all users of particular community - body : communityId
+// @access admin / creator of the community
+communityRouter.post("/readUserCommunity", readUserCommunityController);
 
 module.exports = communityRouter;
