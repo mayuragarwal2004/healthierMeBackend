@@ -177,7 +177,7 @@ const allCommunities = async (uID) => {
   try {
     const queryResult = await new Promise((resolve, reject) => {
       con.query(
-        `SELECT C.community_id, C.community_name, C.last_updated, CU.role
+        `SELECT C.community_id, C.community_name, C.description, C.last_updated, CU.role
         FROM HealthierMe.Community AS C
         INNER JOIN HealthierMe.CommunityUserMapping AS CU
         ON C.community_id = CU.community_id
