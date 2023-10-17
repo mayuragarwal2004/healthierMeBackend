@@ -1,4 +1,7 @@
 const { listChallenges } = require("../models/challenges/challenge.queries.sql");
+const { listTasks } = require("../models/tasks/task.queries.sql");
+const { listEvents } = require("../models/events/event.queries.sql");
+const { listGroups } = require("../models/groups/group.queries.sql");
 
 const createChallengeController = (req, res) => {
   console.log(req.body);
@@ -25,33 +28,46 @@ const listChallengeController = async (req, res) => {
 };
 
 const listTasksEventsGroupsController = async (req, res) => {
-  const { uID, communityId, seasonId } = req.body;
+  const { uID, communityId, seasonId, challengeId } = req.body;
 
-  if (!uID || !communityId || !seasonId) {
+  challengeArr = [];
+
+  if (!uID || !communityId || !seasonId || challengeId) {
     return res.status(400).send("Insufficient inputs");
   }
 
+  
   // 1. Get all tasks
-  // 2. Get all events
-  // 3. Get all groups
-  // 4. Arrange all if needed
-
-  const challengelist = await listChallenges(uID, communityId, seasonId);
-  if (challengelist == -1) {
-    return res.status(500).send("Error fetching challenge list");
-  } else if (challengelist == -2) {
+  const taskArr = await listTasks(uID, communityId, challengeId);
+  if (taskArr == -1) {
+    return res.status(500).send("Error fetching task list");
+  } else if (taskArr == -2) {
     return res.status(403).send("No permission to view the data");
   }
-  if (!challengelist) {
-    return res.status(404).send("Challenge List not found");
+
+  // 2. Get all events
+  const eventArr = await listEvents(uID, communityId, challengeId);
+  if (eventArr == -1) {
+    return res.status(500).send("Error fetching event list");
+  } else if (eventArr == -2) {
+    return res.status(403).send("No permission to view the data");
   }
 
-  return res.status(200).send(challengelist);
+  // 3. Get all groups
+  const groupArr = await listGroups(uID, communityId, challengeId);
+  if (groupArr == -1) {
+    return res.status(500).send("Error fetching group list");
+  } else if (groupArr == -2) {
+    return res.status(403).send("No permission to view the data");
+  }
+  // 4. Arrange all if needed
+  challengeArr.push(taskArr);
+  challengeArr.push(eventArr);
+  challengeArr.push(groupArr);
+
+  return res.status(200).send(challengeArr);
 };
 
-function printhelloworld(){
 
-  
-}
 
 module.exports = { createChallengeController, listChallengeController, listTasksEventsGroupsController };
