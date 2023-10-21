@@ -108,38 +108,38 @@ VALUES
 
 
 
-
 -- Task 1: Daily Exercise
-INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period`, `task_period_unit`, `task_number`, `times_to_complete`, `start_date`, `end_date`)
-VALUES ('t9870968970', 'c24859790233903', 'Daily Exercise', 'Engage in 30 minutes of physical activity each day.', 1, 'minutes', 1, 'day', 1, 30, '2023-10-01', '2023-10-30');
+INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period_unit`, `times_to_complete`, `start_date`, `end_date`)
+VALUES ('t9870968970', 'c24859790233903', 'Daily Exercise', 'Engage in 30 minutes of physical activity each day.', 1, 'minutes', 'daily', 30, '2023-10-01', '2023-10-30');
 
 -- Task 2: Healthy Eating
-INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period`, `task_period_unit`, `task_number`, `times_to_complete`, `start_date`, `end_date`)
-VALUES ('t45806789080', 'c24859790233903', 'Healthy Eating', 'Consume at least five servings of fruits and vegetables daily.', 5, 'servings', 1, 'day', 2, 30, '2023-10-01', '2023-10-30');
+INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period_unit`, `times_to_complete`, `start_date`, `end_date`)
+VALUES ('t45806789080', 'c24859790233903', 'Healthy Eating', 'Consume at least five servings of fruits and vegetables daily.', 5, 'servings', 'daily', 30, '2023-10-01', '2023-10-30');
 
 -- Task 3: Hydration
-INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period`, `task_period_unit`, `task_number`, `times_to_complete`, `start_date`, `end_date`)
-VALUES ('t67578903894', 'c24859790233903', 'Hydration', 'Drink 8 glasses of water daily.', 8, 'glasses', 1, 'day', 3, 30, '2023-10-01', '2023-10-30');
+INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period_unit`, `times_to_complete`, `start_date`, `end_date`)
+VALUES ('t67578903894', 'c24859790233903', 'Hydration', 'Drink 8 glasses of water daily.', 8, 'glasses', 'daily', 30, '2023-10-01', '2023-10-30');
 
 -- Task 4: Sleep
-INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period`, `task_period_unit`, `task_number`, `times_to_complete`, `start_date`, `end_date`)
-VALUES ('t98453907865', 'c24859790233903', 'Adequate Sleep', 'Aim for 7-8 hours of quality sleep each night.', 7, 'hours', 1, 'day', 4, 30, '2023-10-01', '2023-10-30');
+INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period_unit`, `times_to_complete`, `start_date`, `end_date`)
+VALUES ('t98453907865', 'c24859790233903', 'Adequate Sleep', 'Aim for 7-8 hours of quality sleep each night.', 7, 'hours', 'daily', 30, '2023-10-01', '2023-10-30');
 
 -- Task 5: Daily Yoga
-INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period`, `task_period_unit`, `task_number`, `times_to_complete`, `start_date`, `end_date`)
-VALUES ('t8760984797', 'c8968798656900', 'Daily Yoga', 'Practice yoga for 30 minutes every day.', 1, 'minutes', 1, 'day', 1, 30, '2023-11-01', '2023-11-30');
+INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period_unit`, `times_to_complete`, `start_date`, `end_date`)
+VALUES ('t8760984797', 'c8968798656900', 'Daily Yoga', 'Practice yoga for 30 minutes every day.', 1, 'minutes', 'daily', 30, '2023-11-01', '2023-11-30');
 
 -- Task 6: Mindful Eating
-INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period`, `task_period_unit`, `task_number`, `times_to_complete`, `start_date`, `end_date`)
-VALUES ('t3457898945', 'c8968798656900', 'Mindful Eating', 'Eat mindfully and savor each meal for 30 days.', 1, 'meal', 1, 'day', 2, 30, '2023-11-01', '2023-11-30');
+INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period_unit`, `times_to_complete`, `start_date`, `end_date`)
+VALUES ('t3457898945', 'c8968798656900', 'Mindful Eating', 'Eat mindfully and savor each meal for 30 days.', 1, 'meal', 'daily', 30, '2023-11-01', '2023-11-30');
 
 -- Task 7: Daily Meditation
-INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period`, `task_period_unit`, `task_number`, `times_to_complete`, `start_date`, `end_date`)
-VALUES ('t89859648899', 'c8968798656900', 'Daily Meditation', 'Practice meditation for 15 minutes every day.', 1, 'minutes', 1, 'day', 3, 30, '2023-11-01', '2023-11-30');
+INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period_unit`, `times_to_complete`, `start_date`, `end_date`)
+VALUES ('t89859648899', 'c8968798656900', 'Daily Meditation', 'Practice meditation for 15 minutes every day.', 1, 'minutes', 'daily', 30, '2023-11-01', '2023-11-30');
 
 -- Task 8: Stay Hydrated
-INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period`, `task_period_unit`, `task_number`, `times_to_complete`, `start_date`, `end_date`)
-VALUES ('t457869083487', 'c8968798656900', 'Stay Hydrated', 'Consume at least 10 glasses of water daily.', 10, 'glasses', 1, 'day', 4, 30, '2023-11-01', '2023-11-30');
+INSERT INTO `HealthierMe`.`Tasks` (`task_id`, `challenge_id`, `task_name`, `task_description`, `task_quantity`, `task_unit`, `task_period_unit`, `times_to_complete`, `start_date`, `end_date`)
+VALUES ('t457869083487', 'c8968798656900', 'Stay Hydrated', 'Consume at least 10 glasses of water daily.', 10, 'glasses', 'daily', 30, '2023-11-01', '2023-11-30');
+
 
 
 -- Event 1 for Challenge ID 'c24859790233903'
