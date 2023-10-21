@@ -49,9 +49,4 @@ const listTasksEventsGroupsController = async (req, res) => {
   return res.status(200).send(challengelist);
 };
 
-function printhelloworld(){
-
-  
-}
-
 module.exports = { createChallengeController, listChallengeController, listTasksEventsGroupsController };

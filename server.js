@@ -28,3 +28,8 @@ app.use('/api/challenge', challengeRouter)
 app.use('/api/activity', activityRouter)
 
 app.listen(5001, () => console.log("listening"));
+
+
+//work
+//update desc sql field in all
+//add userId validation especially for community

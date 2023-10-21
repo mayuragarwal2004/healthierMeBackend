@@ -1,31 +1,38 @@
 const {
   createUser,
   validateUser,
-  readUser,
+  readUserByUId,
+  readUserByPhone,
   existUser,
 } = require("../models/users/user.queries.sql");
 
 const userReadController = async (req, res) => {
-  let { uId } = req.body;
-  if (!uId) {
+  let { uId, phone } = req.body;
+  if (!uId && !phone) {
     return res.status(400).send("Insufficient inputs");
   }
-  userObj = await readUser(uId);
-  if (userObj == -1) {
-    return res.status(500).send("Error fetching user");
+  if(uId){
+    userObj = await readUserByUId(uId);
   }
-  if (!userObj) {
-    return res.status(404).send("User not found");
-  }
-  return res.status(200).send(userObj);
-};
+  else if(phone){
+    userObj = await readUserByPhone(phone);
+}
+
+if (userObj == -1) {
+  return res.status(500).send("Error fetching user");
+}
+if (!userObj) {
+  return res.status(404).send("User not found");
+}
+return res.status(200).send(userObj);
+}
 
 const userCreateController = async (req, res) => {
   let uItem = req.body;
   // console.log(uItem)
   let vU = await validateUser(uItem);
   if (!uItem || vU == 0) {
-    return res.status(400).send("Insufficient inputs");
+    return res.status(400).send("Insufficient / Incorrect inputs");
   }
   switch (vU) {
     case -1:
@@ -37,17 +44,17 @@ const userCreateController = async (req, res) => {
   if (uObj == -1) {
     return res.status(500).send("Error creating User");
   }
-  return res.status(200).send("User created successfully");
+  return res.status(200).send(uObj);
 };
 
 const userExistController = async (req, res) => {
   let uItem = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   let vU = await existUser(uItem);
   if (!uItem || vU == 0) {
     return res.status(400).send("Insufficient inputs");
   }
-  console.log({ vU });
+  // console.log({ vU });
   switch (vU) {
     case 1:
       return res.status(200).send({ exists: true }); // User exists

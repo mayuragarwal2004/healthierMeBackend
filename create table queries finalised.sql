@@ -7,15 +7,16 @@ CREATE TABLE HealthierMe.User (
     middle_name VARCHAR(255),
     email VARCHAR(255) UNIQUE,
     phone VARCHAR(20) NOT NULL UNIQUE,
-    dob DATE,
-    gender ENUM('Male', 'Female', 'Other'),
-    address VARCHAR(500),
+    dob DATE NOT NULL,
+    gender ENUM('Male', 'Female', 'Other') NOT NULL,
+    -- address VARCHAR(500),
     locality VARCHAR(255) NOT NULL,
     pincode VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
-    join_date DATETIME NOT NULL,
-    last_active_datetime DATETIME,
+    created_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_active_datetime DATETIME ,
     height FLOAT,
     weight FLOAT,
     profile_picture VARCHAR(255),
@@ -27,17 +28,19 @@ CREATE TABLE HealthierMe.Community (
     community_id VARCHAR(255) PRIMARY KEY,
     community_join_code VARCHAR(6) NOT NULL,
     community_name VARCHAR(255) NOT NULL,
-    locality VARCHAR(255),
+    locality VARCHAR(255) NOT NULL,
     pincode VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
     created_by_user_id VARCHAR(255) NOT NULL,
-    created_datetime DATETIME NOT NULL, 
     members_count INT DEFAULT 1,                    -- has to be updated
     description TEXT, 
-    access ENUM('Open', 'Admin_control', 'Predefined'),
+    access ENUM('Open', 'Admin_control', 'Predefined'), -- avoided for now
+    created_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted BOOLEAN DEFAULT false
+    deleted BOOLEAN DEFAULT false,
+    FOREIGN KEY (created_by_user_id) REFERENCES User(user_id)
+
 );
 
 CREATE TABLE HealthierMe.CommunityUserMapping (
@@ -45,7 +48,8 @@ CREATE TABLE HealthierMe.CommunityUserMapping (
     community_id VARCHAR(255) NOT NULL,
     user_id VARCHAR(255) NOT NULL,
     role ENUM('Member', 'Admin', 'Creator') NOT NULL,
-    join_date DATETIME NOT NULL,
+    created_datetime DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     -- last_active_datetime DATETIME,          not needed
     deleted BOOLEAN DEFAULT false,
     UNIQUE KEY unique_community_user (community_id, user_id), -- Ensures each user can have only one role per community

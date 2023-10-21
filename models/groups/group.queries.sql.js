@@ -1,5 +1,6 @@
 const Group = require("./group.model");
 const con = require("../../connection.sql");
+const { verifyUserCommunity } = require("../community/community.queries.sql");
 
 const readGroupByGid = async(gId) =>{
   queryResult = await new Promise((resolve, reject) => {
