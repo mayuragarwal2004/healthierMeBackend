@@ -12,6 +12,6 @@ challengeRouter.post('/list', listChallengeController)
 // @route Post /api/challenge/listTEG
 // @desc List all Tasks, Events, Groups of a challenge ID - body : uID, communityId, seasonId, challengeId
 // @access Users registered in the community - middleware to be included
-challengeRouter.post('/list', listTasksEventsGroupsController)
+challengeRouter.post('/listTEG', listTasksEventsGroupsController)
 
 module.exports = challengeRouter

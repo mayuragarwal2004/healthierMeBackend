@@ -93,7 +93,7 @@ const existUser = async (uItem) => {
   try {
     const queryResult = await new Promise((resolve, reject) => {
       con.query(
-        "SELECT count(*) FROM user WHERE phone=" + uItem.phone,
+        "SELECT count(*) FROM HealthierMe.user WHERE phone=" + uItem.phone,
         (err, result, fields) => {
           if (err) {
             reject(err);

@@ -92,15 +92,19 @@ const createCEvent = async (cId, eventArr) => {
   return true;
 };
 
-const listEvents = async (uID, communityId, challengeId) => {
-  if (!uID || !communityId || !challengeId) {
+const listEvents = async ( challengeId) => {
+  if (!challengeId) {
     return 0;
   }
 
   try {
-    if (!(await verifyUserCommunity(uID, communityId))) {
-      return -2;
-    }
+    // const verification = await verifyUserCommunity(uID, communityId);
+    // if (!verification) {
+    //   return -2;
+    // }
+    // if (verification == -1) {
+    //   return -1;
+    // }
 
     const queryResult = await new Promise((resolve, reject) => {
       con.query(

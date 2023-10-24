@@ -94,15 +94,19 @@ const createCTask = async (cId, taskArr) => {
 
 };
 
-const listTasks = async (uID, communityId, challengeId) => {
-  if (!uID || !communityId || !challengeId) {
+const listTasks = async (challengeId) => {
+  if (!challengeId) {
     return 0;
   }
 
   try {
-    if (!(await verifyUserCommunity(uID, communityId))) {
-      return -2;
-    }
+    // const verification = await verifyUserCommunity(uID, communityId);
+    // if (!verification) {
+    //   return -2;
+    // }
+    // if (verification == -1) {
+    //   return -1;
+    // }
 
     const queryResult = await new Promise((resolve, reject) => {
       con.query(
@@ -120,7 +124,7 @@ const listTasks = async (uID, communityId, challengeId) => {
       );
     });
 
-    return queryResult;
+    return queryResult[0];
   } catch (err) {
     console.log(err);
     return -1;

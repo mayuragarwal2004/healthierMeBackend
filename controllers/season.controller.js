@@ -28,6 +28,7 @@ const {
   listSeasons,
 } = require("../models/seasons/season.queries.sql");
 
+//not updates wrt sql
 const readSeasonController = async (req, res) => {
   //get season object
   let seasonObj = await readSeason(req.body.sId);
@@ -177,12 +178,13 @@ const listSeasonController = async (req, res) => {
   if (!uID || !communityId) {
     return res.status(400).send("Insufficient inputs");
   }
-  const seasonlist = await listSeasons(uID, communityId);
+  const seasonlist = await listSeasons( communityId);
   if (seasonlist == -1) {
     return res.status(500).send("Error fetching season list");
-  } else if (seasonlist == -2) {
-    return res.status(403).send("No permission to view the data");
-  }
+  } 
+  // else if (seasonlist == -2) {
+  //   return res.status(403).send("No permission to view the data");
+  // }
   if (!seasonlist) {
     return res.status(404).send("Season List not found");
   }

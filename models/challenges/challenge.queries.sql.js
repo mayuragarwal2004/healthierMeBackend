@@ -81,15 +81,19 @@ const createChallenge = async (sId, cObj) => {
   return queryResult
 };
 
-const listChallenges = async (uID, communityId, seasonId) => {
-  if (!uID || !communityId) {
-    return 0;
-  }
+const listChallenges = async (seasonId) => {
+  // if (!uID || !communityId) {
+  //   return 0;
+  // }
 
   try {
-    if (!(await verifyUserCommunity(uID, communityId))) {
-      return -2;
-    }
+    // const verification = await verifyUserCommunity(uID, communityId);
+    // if (!verification) {
+    //   return -2;
+    // }
+    // if (verification == -1) {
+    //   return -1;
+    // }
 
     const queryResult = await new Promise((resolve, reject) => {
       con.query(
