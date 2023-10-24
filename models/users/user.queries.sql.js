@@ -54,10 +54,10 @@ const readUserByPhone = async (phone) => {
   return queryResult[0]
 };
 
-const readUserByUId = async (uId) => {
+const readUserByUId = async (uid) => {
   queryResult = await new Promise((resolve, reject)=>{
     con.query(
-      `SELECT * FROM HealthierMe.User WHERE user_id='${uId}'; `,
+      `SELECT * FROM HealthierMe.User WHERE user_id='${uid}'; `,
       function (err, result, fields) {
         if (err) {
           reject(err) 
@@ -74,8 +74,8 @@ const readUserByUId = async (uId) => {
   return queryResult[0]
 };
 
-// const checkMId = async (uId, mId) => {
-//   let { mIds } = await User.findOne({ uId: uId }).catch((err) => {
+// const checkMId = async (uid, mId) => {
+//   let { mIds } = await User.findOne({ uid: uid }).catch((err) => {
 //     console.log(err);
 //     return -1; //501
 //   });
@@ -145,7 +145,7 @@ const existUser = async (uItem) => {
 
 const validateUser = async (uItem) => {
   if (
-    !uItem.uId ||
+    !uItem.uid ||
     !uItem.firstName ||
     !uItem.lastName ||
     !uItem.phone ||
@@ -164,7 +164,7 @@ const validateUser = async (uItem) => {
     return 0;
   }
   let existUser = await readUserByPhone(uItem.phone)
-  let existUser2 = await readUserByUId(uItem.uId)
+  let existUser2 = await readUserByUId(uItem.uid)
   if (existUser == -1 || existUser2 == -1) {
     return -1;
   } 
@@ -176,7 +176,7 @@ const validateUser = async (uItem) => {
 }
 
 const createUser = async (uItem) => {
-  const {uId, firstName, lastName, middleName, email, phone, dob, gender, address, height, weight } = uItem
+  const {uid, firstName, lastName, middleName, email, phone, dob, gender, address, height, weight } = uItem
   let sql_middle_name = (middleName)? ", middle_name" : ""
   let main_middle_name = (middleName)? `, '${middleName}' ` : ""
   let sql_email = (email)? ", email" : ""
@@ -190,7 +190,7 @@ const createUser = async (uItem) => {
       `INSERT INTO HealthierMe.User
       (user_id, first_name, last_name ${sql_middle_name} ${sql_email}, phone, dob, gender, locality, pincode, city, state ${sql_height} ${sql_weight}) 
       VALUES 
-      ('${uId}', '${firstName}', '${lastName}' ${main_middle_name} ${main_email}  ,'${phone}', '${dob}', '${gender}', '${address.locality}', '${address.pincode}', '${address.city}' , '${address.state}' ${main_height} ${main_weight});
+      ('${uid}', '${firstName}', '${lastName}' ${main_middle_name} ${main_email}  ,'${phone}', '${dob}', '${gender}', '${address.locality}', '${address.pincode}', '${address.city}' , '${address.state}' ${main_height} ${main_weight});
        `,
       function (err, result, fields) {
         if (err) {
