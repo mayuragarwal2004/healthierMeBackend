@@ -49,11 +49,15 @@ const validateGroup = async (gItem) => {
     return false;
   }
 
-  if (
-    await readGroupByGid(gItem.gId)
-  ) {
+  const groupObj = await readGroupByGid(gItem.gId)
+
+  if (groupObj == -1) {
+    return -1;
+  }
+  if (groupObj){
     return false;
   }
+ 
   return true;
 };
 
@@ -86,15 +90,19 @@ const createCGroup = async (cId, groupArr) => {
   return true
 };
 
-const listGroups = async (uID, communityId, challengeId) => {
-  if (!uID || !communityId || !challengeId) {
+const listGroups = async (challengeId) => {
+  if ( !challengeId) {
     return 0;
   }
 
   try {
-    if (!(await verifyUserCommunity(uID, communityId))) {
-      return -2;
-    }
+    // const verification = await verifyUserCommunity(uID, communityId);
+    // if (!verification) {
+    //   return -2;
+    // }
+    // if (verification == -1) {
+    //   return -1;
+    // }
 
     const queryResult = await new Promise((resolve, reject) => {
       con.query(

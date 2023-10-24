@@ -72,15 +72,16 @@ const createSeason = async (sObj) => {
 
 };
 
-const listSeasons = async (uID, communityId) => {
-  if (!uID || !communityId) {
-    return 0;
-  }
+const listSeasons = async (communityId) => {
 
   try {
-    if (!(await verifyUserCommunity(uID, communityId))) {
-      return -2;
-    }
+    // const verification = await verifyUserCommunity(uID, communityId);
+    // if (!verification) {
+    //   return -2;
+    // }
+    // if (verification == -1) {
+    //   return -1;
+    // }
 
     const queryResult = await new Promise((resolve, reject) => {
       con.query(
@@ -100,7 +101,7 @@ const listSeasons = async (uID, communityId) => {
       );
     });
 
-    return queryResult;
+    return queryResult[0];
   } catch (err) {
     console.log(err);
     return -1;
@@ -110,6 +111,3 @@ const listSeasons = async (uID, communityId) => {
 module.exports = { createSeason, validateSeason, readSeason, listSeasons };
 
 
-//Things to correct
-// Indian dateTime
-// fix Null check
