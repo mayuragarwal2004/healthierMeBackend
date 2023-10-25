@@ -106,7 +106,7 @@ const listGroups = async (challengeId) => {
 
     const queryResult = await new Promise((resolve, reject) => {
       con.query(
-        `SELECT G.g_id, G.num_opts, G.min_to_comp, G.activity
+        `SELECT G.g_id, G.num_opts, G.min_to_comp
         FROM HealthierMe.Groups AS G
         WHERE G.challenge_id = '${challengeId}';`,
         (err, result, fields) => {

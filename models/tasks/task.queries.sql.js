@@ -110,11 +110,12 @@ const listTasks = async (challengeId) => {
 
     const queryResult = await new Promise((resolve, reject) => {
       con.query(
-        `SELECT T.task_id, T.task_name, T.task_description, T.task_quantity, T.task_unit, T.task_period, T.task_period_unit, T.task_number, T.times_to_complete, T.start_date, T.end_date
+        `SELECT T.task_id, T.task_name, T.task_description, T.task_quantity, T.task_unit, T.task_period_unit, T.times_to_complete, T.start_date, T.end_date
         FROM HealthierMe.Tasks AS T
         WHERE T.challenge_id = '${challengeId}';`,
         (err, result, fields) => {
           if (err) {
+            console.log(err);
             reject(err);
             return;
           }
@@ -124,7 +125,7 @@ const listTasks = async (challengeId) => {
       );
     });
 
-    return queryResult[0];
+    return queryResult;
   } catch (err) {
     console.log(err);
     return -1;
