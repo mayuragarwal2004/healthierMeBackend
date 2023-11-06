@@ -101,7 +101,7 @@ const listSeasons = async (communityId) => {
       );
     });
 
-    return queryResult[0];
+    return queryResult;
   } catch (err) {
     console.log(err);
     return -1;
