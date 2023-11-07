@@ -7,6 +7,7 @@ const {
 } = require("../models/users/user.queries.sql");
 
 const userReadController = async (req, res) => {
+  console.log(req.body);
   let { uId, phone } = req.body;
   if (!uId && !phone) {
     return res.status(400).send("Insufficient inputs");

@@ -27,6 +27,9 @@ app.use('/api/season', seasonRouter)
 app.use('/api/challenge', challengeRouter)
 app.use('/api/activity', activityRouter)
 
+var ip = require("ip");
+console.dir ( ip.address() );
+
 app.listen(5001, () => console.log("listening"));
 
 
